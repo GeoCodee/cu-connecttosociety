@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+NOTE: Need to add .env file that contains clerk authentication keys, refer to clerk.com for needed keys
+
 First, run the development server:
 
 ```bash
