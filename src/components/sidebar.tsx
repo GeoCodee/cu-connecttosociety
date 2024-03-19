@@ -12,6 +12,8 @@ import {
   VideoIcon,
   UserRound,
   Calendar,
+  CirclePlus,
+  PersonStanding,
 } from "lucide-react";
 import { Image as ImageIcon } from "lucide-react";
 import { Code2 } from "lucide-react";
@@ -21,6 +23,12 @@ const montseratt = Montserrat({ weight: "600", subsets: ["latin"] });
 
 const routes = [
   {
+    label: "Create Event",
+    icon: CirclePlus,
+    href: "/Create Event",
+    color: "text-green-400",
+  },
+  {
     label: "Events",
     icon: Calendar,
     href: "/events",
@@ -29,7 +37,7 @@ const routes = [
   {
     label: "Profile",
     icon: UserRound,
-    href: "/user",
+    href: "/profile",
     color: "text-green-400",
   },
 ];
@@ -39,8 +47,16 @@ const Sidebar = () => {
   return (
     <div className="space-y-4 py-4 flex flec-col h-full bg-[#111827] text-white">
       <div className="px-3 py-2 flex-1">
-        <Link href="/dashboard" className="flex items-center pl-3 mb-14">
-          <div className="relative w-8 h-8 mr-4">{/* Insert Logo */}</div>
+        <Link
+          href="/dashboard"
+          className="flex items-center justify-start pl-2 mb-14"
+        >
+          <div className="relative w-8 h-8 mr-4">
+            <PersonStanding
+              className="text-green-400"
+              size={32}
+            ></PersonStanding>
+          </div>
           <h1
             className={cn(
               "text-2xl font-bold text-green-400",
@@ -50,6 +66,7 @@ const Sidebar = () => {
             CU
           </h1>
         </Link>
+        <div className="border-b-2 border-green-400 w-full"></div>
         <div className="space-y-1">
           {routes.map((route) => (
             <Link
