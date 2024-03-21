@@ -9,11 +9,11 @@ export default authMiddleware({
   // Prevent the specified routes from accessing
   // authentication information:
   // ignoredRoutes: ['/no-auth-in-this-route'],
-  ignoredRoutes: ["/(api|trpc)(.*)"],
+  // ignoredRoutes: ["/(api|trpc)(.*)"],
   publicRoutes: ["/"],
 });
 
 export const config = {
-  // matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/"],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+  // matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/"],
 };

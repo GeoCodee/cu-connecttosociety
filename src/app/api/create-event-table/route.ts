@@ -8,7 +8,7 @@ export async function GET(request: Request) {
     const result = await sql`
                 CREATE TABLE EVENT(
                 eventId SERIAL PRIMARY KEY,
-                userId INT,
+                userId VARCHAR(255),
                 eventName VARCHAR(255),
                 eventLocation VARCHAR(255),
                 eventTime VARCHAR(255),

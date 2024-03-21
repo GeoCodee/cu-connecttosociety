@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const INITIAL_STATE = [
   {
@@ -32,7 +32,14 @@ const INITIAL_STATE = [
 ];
 
 export default function Events() {
-  const [events, setEvents] = useState(INITIAL_STATE);
+  const [events, setEvents] = useState([]);
+
+  useEffect(function () {
+    fetch(`/api/get-events`)
+      .then((response) => response.json())
+      .then((data) => setEvents(data))
+      .catch((error) => console.log(error.message));
+  }, []);
 
   return (
     <div className="flex flex-wrap gap-4">
@@ -42,7 +49,7 @@ export default function Events() {
             <h3 className="text-lg font-bold">{event.eventName}</h3>
             <p className="mt-2">{event.description}</p>
             <p className="mt-2">
-              <span className="font-bold">{event.date}</span> 
+              <span className="font-bold">{event.date}</span>
               <span className="mx-2">at</span>
               {event.time}
             </p>

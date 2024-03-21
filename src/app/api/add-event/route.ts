@@ -16,6 +16,7 @@ export async function POST(req: Request) {
   try {
     await sql`INSERT INTO Event(userid,eventname,eventlocation,eventtime) VALUES(${userId},${eventName},${eventLocation},${eventTime})`;
   } catch (error) {
+    console.log(error.message);
     return NextResponse.json({ error }, { status: 500 });
   }
 

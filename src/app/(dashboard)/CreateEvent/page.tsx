@@ -8,6 +8,7 @@ export default function EventForm() {
   const date = useRef<HTMLDivElement>(null);
   const time = useRef<HTMLDivElement>(null);
   const capacity = useRef<HTMLDivElement>(null);
+  const location = useRef<HTMLDivElement>(null);
   const eventType = useRef<HTMLDivElement>(null);
 
   function onSubmit(e) {
@@ -16,7 +17,8 @@ export default function EventForm() {
       eventName: eventName.current.value,
       description: description.current.value,
       date: date.current.value,
-      time: time.current.value,
+      eventLocation: location.current.value,
+      eventTime: time.current.value,
       capacity: capacity.current.value,
       eventType: eventType.current.value,
     };
@@ -53,6 +55,17 @@ export default function EventForm() {
         ></textarea>
       </div>
       <div className="mb-4">
+        <label htmlFor="event-location" className="block">
+          Where is the Event?
+        </label>
+        <input
+          ref={location}
+          type="text"
+          id="event-location"
+          className="mt-1 p-2 border rounded w-full"
+        />
+      </div>
+      <div className="mb-4">
         <label htmlFor="event-date" className="block">
           When is the Event?
         </label>
@@ -63,6 +76,7 @@ export default function EventForm() {
           className="mt-1 p-2 border rounded w-full"
         />
       </div>
+
       <div className="mb-4">
         <label htmlFor="event-time" className="block">
           What time is the Event?
