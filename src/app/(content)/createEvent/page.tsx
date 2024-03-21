@@ -3,10 +3,18 @@
 import { useRef } from "react";
 
 export default function EventForm() {
+  // const eventName = useRef<HTMLDivElement>(null);
+  // const description = useRef<HTMLDivElement>(null);
+  // const date = useRef<HTMLDivElement>(null);
+  // const time = useRef<HTMLDivElement>(null);
+  // const capacity = useRef<HTMLDivElement>(null);
+  // const eventType = useRef<HTMLDivElement>(null);
+
   const eventName = useRef<HTMLInputElement>(null);
   const description = useRef<HTMLTextAreaElement>(null);
   const date = useRef<HTMLInputElement>(null);
   const time = useRef<HTMLInputElement>(null);
+  const location = useRef<HTMLInputElement>(null);
   const capacity = useRef<HTMLInputElement>(null);
   const eventType = useRef<HTMLSelectElement>(null);
 
@@ -17,15 +25,16 @@ export default function EventForm() {
       description: description.current?.value,
       date: date.current?.value,
       time: time.current?.value,
+      location: location.current?.value,
       capacity: capacity.current?.value,
       eventType: eventType.current?.value,
     };
-    fetch("/api/add-pet?petName=Fluffy&ownerName=John", {
-      method: "GET",
-      // body: JSON.stringify(newEvent),
-      // headers: {
-      //   "Content-Type": "application/json",
-      // },
+    fetch("/api/add-event", {
+      method: "POST",
+      body: JSON.stringify(newEvent),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
   }
 
@@ -53,17 +62,6 @@ export default function EventForm() {
         ></textarea>
       </div>
       <div className="mb-4">
-        <label htmlFor="event-location" className="block">
-          Where is the Event?
-        </label>
-        <input
-          ref={location}
-          type="text"
-          id="event-location"
-          className="mt-1 p-2 border rounded w-full"
-        />
-      </div>
-      <div className="mb-4">
         <label htmlFor="event-date" className="block">
           When is the Event?
         </label>
@@ -85,6 +83,18 @@ export default function EventForm() {
           className="mt-1 p-2 border rounded w-full"
         />
       </div>
+      <div className="mb-4">
+        <label htmlFor="event-locaaion" className="block">
+          Where is the location?
+        </label>
+        <input
+          ref={location}
+          type="text"
+          id="capacity"
+          className="mt-1 p-2 border rounded w-full"
+        />
+      </div>
+
       <div className="mb-4">
         <label htmlFor="capacity" className="block">
           How many people can join the event?
