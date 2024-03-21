@@ -46,8 +46,10 @@ export default function Events() {
       .catch((error) => console.log(error.message));
   }, []);
 
-  function joinHandler() {
-
+  function joinHandler(userId, eventId) {
+    // Do a get query to check if an event exists where userId and eventId match the table in the db.
+    // if there is no match then the user can join 
+    // else the user cannot join again
   }
 
   return (
@@ -64,7 +66,7 @@ export default function Events() {
             </p>
             <p className="mt-2">Capacity: {event.capacity}</p>
             <p className="mt-2">Event Type: {event.eventtype}</p>
-            <button onClick={joinHandler}>Join Event</button>
+            <button onClick={() => joinHandler(event.userid, event.eventid)}>Join Event</button>
           </div>
         );
       })}
