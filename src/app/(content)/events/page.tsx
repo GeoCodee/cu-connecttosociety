@@ -46,11 +46,11 @@ export default function Events() {
       .catch((error) => console.log(error.message));
   }, []);
 
-  // function joinHandler(userId: string, eventId: number) {
-  //   // Do a get query to check if an event exists where userId and eventId match the table in the db.
-  //   // if there is no match then the user can join
-  //   // else the user cannot join again
-  // }
+  function joinHandler(userId: string, eventId: number) {
+    // Do a get query to check if an event exists where userId and eventId match the table in the db.
+    // if there is no match then the user can join
+    // else the user cannot join again
+  }
 
   return (
     <div className="flex flex-wrap gap-4">
