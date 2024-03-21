@@ -25,7 +25,7 @@ const routes = [
   {
     label: "Create Event",
     icon: CirclePlus,
-    href: "/CreateEvent",
+    href: "/createEvent",
     color: "text-green-400",
   },
   {
@@ -49,7 +49,7 @@ const Sidebar = () => {
       <div className="px-3 py-2 flex-1">
         <Link
           href="/dashboard"
-          className="flex items-center justify-start pl-2 mb-14"
+          className="flex items-center justify-start pl-2"
         >
           <div className="relative w-8 h-8 mr-4">
             <PersonStanding
@@ -66,7 +66,7 @@ const Sidebar = () => {
             CU
           </h1>
         </Link>
-        <div className="border-b-2 border-green-400 w-full"></div>
+        <div className="border-b-4 border-green-400 w-full mb-8 mt-5"></div>
         <div className="space-y-1">
           {routes.map((route) => (
             <Link
