@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
-    await sql`DROP TABLE IF EXISTS EVENT`;
+    // await sql`DROP TABLE IF EXISTS EVENT`;
 
     const result = await sql`
                 CREATE TABLE EVENT(

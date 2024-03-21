@@ -3,31 +3,29 @@
 import { useRef } from "react";
 
 export default function EventForm() {
-  const eventName = useRef<HTMLDivElement>(null);
-  const description = useRef<HTMLDivElement>(null);
-  const date = useRef<HTMLDivElement>(null);
-  const time = useRef<HTMLDivElement>(null);
-  const capacity = useRef<HTMLDivElement>(null);
-  const location = useRef<HTMLDivElement>(null);
-  const eventType = useRef<HTMLDivElement>(null);
+  const eventName = useRef<HTMLInputElement>(null);
+  const description = useRef<HTMLTextAreaElement>(null);
+  const date = useRef<HTMLInputElement>(null);
+  const time = useRef<HTMLInputElement>(null);
+  const capacity = useRef<HTMLInputElement>(null);
+  const eventType = useRef<HTMLSelectElement>(null);
 
-  function onSubmit(e) {
+  function onSubmit(e: any) {
     e.preventDefault();
     const newEvent = {
-      eventName: eventName.current.value,
-      description: description.current.value,
-      date: date.current.value,
-      eventLocation: location.current.value,
-      eventTime: time.current.value,
-      capacity: capacity.current.value,
-      eventType: eventType.current.value,
+      eventName: eventName.current?.value,
+      description: description.current?.value,
+      date: date.current?.value,
+      time: time.current?.value,
+      capacity: capacity.current?.value,
+      eventType: eventType.current?.value,
     };
-    fetch("/api/add-event", {
-      method: "POST",
-      body: JSON.stringify(newEvent),
-      headers: {
-        "Content-Type": "application/json",
-      },
+    fetch("/api/add-pet?petName=Fluffy&ownerName=John", {
+      method: "GET",
+      // body: JSON.stringify(newEvent),
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
     });
   }
 
@@ -76,7 +74,6 @@ export default function EventForm() {
           className="mt-1 p-2 border rounded w-full"
         />
       </div>
-
       <div className="mb-4">
         <label htmlFor="event-time" className="block">
           What time is the Event?

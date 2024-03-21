@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   //   const email;
 
   try {
-    await sql`INSERT INTO Event(userid,eventname,eventlocation,eventtime) VALUES(${userId},${eventName},${eventLocation},${eventTime})`;
+    await sql`INSERT INTO Event(userid,eventname,eventlocation,eventtime,capacity) VALUES(${userId},${eventName},${eventLocation},${eventTime},${capacity})`;
   } catch (error) {
     console.log(error.message);
     return NextResponse.json({ error }, { status: 500 });
