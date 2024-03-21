@@ -25,7 +25,7 @@ const routes = [
   {
     label: "Create Event",
     icon: CirclePlus,
-    href: "/Create Event",
+    href: "/CreateEvent",
     color: "text-green-400",
   },
   {
