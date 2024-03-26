@@ -1,0 +1,7 @@
+Status: In Progress
+//Make sure the event doesn't get over the capacity
+- Subtract 1 to the event capacity every time a user join
+
+Status: In progress
+// Display the users who joined the event
+- Include user profiles in event card
