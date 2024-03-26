@@ -9,6 +9,7 @@ export default function EventForm() {
   const time = useRef<HTMLInputElement>(null);
   const capacity = useRef<HTMLInputElement>(null);
   const eventType = useRef<HTMLSelectElement>(null);
+  const location = useRef<HTMLInputElement>(null);
 
   function onSubmit(e: any) {
     e.preventDefault();
@@ -20,12 +21,12 @@ export default function EventForm() {
       capacity: capacity.current?.value,
       eventType: eventType.current?.value,
     };
-    fetch("/api/add-pet?petName=Fluffy&ownerName=John", {
-      method: "GET",
-      // body: JSON.stringify(newEvent),
-      // headers: {
-      //   "Content-Type": "application/json",
-      // },
+    fetch("/api/add-event", {
+      method: "POST",
+      body: JSON.stringify(newEvent),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
   }
 
@@ -40,6 +41,7 @@ export default function EventForm() {
           type="text"
           id="event-name"
           className="mt-1 p-2 border rounded w-full"
+          required
         />
       </div>
       <div className="mb-4">
@@ -50,6 +52,7 @@ export default function EventForm() {
           ref={description}
           id="description"
           className="mt-1 p-2 border rounded w-full"
+          required
         ></textarea>
       </div>
       <div className="mb-4">
@@ -61,6 +64,7 @@ export default function EventForm() {
           type="text"
           id="event-location"
           className="mt-1 p-2 border rounded w-full"
+          required
         />
       </div>
       <div className="mb-4">
@@ -72,6 +76,7 @@ export default function EventForm() {
           type="date"
           id="event-date"
           className="mt-1 p-2 border rounded w-full"
+          required
         />
       </div>
       <div className="mb-4">
@@ -83,6 +88,7 @@ export default function EventForm() {
           type="time"
           id="event-time"
           className="mt-1 p-2 border rounded w-full"
+          required
         />
       </div>
       <div className="mb-4">
@@ -94,6 +100,7 @@ export default function EventForm() {
           type="number"
           id="capacity"
           className="mt-1 p-2 border rounded w-full"
+          required
         />
       </div>
       <div className="mb-4">
@@ -104,6 +111,7 @@ export default function EventForm() {
           ref={eventType}
           id="typeOfEvent"
           className="mt-1 p-2 border rounded w-full"
+          required
         >
           <option>Type 1</option>
           <option>Type 2</option>
