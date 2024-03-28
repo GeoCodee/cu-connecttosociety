@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
+    //leave it here, this route will get outdated data from DBb without this line of code for some reason
+    let url: string = request.url;
     // await sql`DROP TABLE IF EXISTS EVENT`;
 
     const result = await sql`

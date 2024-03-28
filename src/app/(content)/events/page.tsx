@@ -35,6 +35,10 @@ export default function Events() {
   const [events, setEvents] = useState([]);
 
   useEffect(function () {
+    getEvents();
+  }, []);
+
+  function getEvents() {
     fetch(`/api/get-events`)
       .then((response) => response.json())
       .then((data) => {
@@ -44,10 +48,22 @@ export default function Events() {
         setEvents(result?.rows);
       })
       .catch((error) => console.log(error.message));
-  }, []);
+  }
 
   function joinHandler(userId: string, eventId: number) {
     // Do a get query to check if an event exists where userId and eventId match the table in the db.
+    fetch(`/api/join-event`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({ userId, eventId }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const { result } = data;
+      });
     // if there is no match then the user can join
     // else the user cannot join again
   }

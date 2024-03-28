@@ -10,13 +10,17 @@ export async function POST(req: Request) {
 
     const result =
       await sql`SELECT userid,eventid FROM EVENT_PARTICIPATION WHERE
-        userId = ${userId} AND eventid = ${eventId}`;
+        userId = ${userId} AND eventId = ${eventId}`;
 
     if (result.rowCount == 0) {
+      const addUser =
+        await sql`INSERT INTO EVENT_PARTICIPATION (userid,eventid) VALUES (${userId},${eventId})`;
+
       let returnProperties = {
         message: "User joined event successfully",
-        resultInfo: result,
+        resultInfo: addUser,
       };
+
       return NextResponse.json({ returnProperties }, { status: 200 });
     } else {
       let returnProperties = {
