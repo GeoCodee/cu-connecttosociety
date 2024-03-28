@@ -50,14 +50,14 @@ export default function Events() {
       .catch((error) => console.log(error.message));
   }
 
-  function joinHandler(userId: string, eventId: number) {
+  function joinHandler(eventId: number) {
     // Do a get query to check if an event exists where userId and eventId match the table in the db.
     fetch(`/api/join-event`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify({ userId, eventId }),
+      body: JSON.stringify({ eventId }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -78,11 +78,11 @@ export default function Events() {
             <p className="mt-2">
               <span className="font-bold">{event.eventdate}</span>
               <span className="mx-2">at</span>
-              {event.eventtime}evetn
+              {event.eventtime}
             </p>
             <p className="mt-2">Capacity: {event.capacity}</p>
             <p className="mt-2">Event Type: {event.eventtype}</p>
-            <button onClick={() => joinHandler(event.userid, event.eventid)}>
+            <button onClick={() => joinHandler(event.eventid)}>
               Join Event
             </button>
           </div>

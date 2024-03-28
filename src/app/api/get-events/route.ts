@@ -7,9 +7,16 @@ export async function GET(request: Request) {
     let url: string = request.url;
     // await sql`DROP TABLE IF EXISTS EVENT`;
 
+    // const result = await sql`
+    //           SELECT * FROM EVENT;
+    //         `;
+
     const result = await sql`
-              SELECT * FROM EVENT;
-            `;
+        SELECT * FROM event e
+        LEFT JOIN event_participation ep ON e.eventId = ep.eventId AND ep.userId = 'your_user_id'
+        WHERE ep.eventId IS NULL
+        AND e.capacity > 0;
+      `;
     return NextResponse.json({ result }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
