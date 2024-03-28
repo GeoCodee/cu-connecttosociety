@@ -1,36 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 
-// const INITIAL_STATE = [
-//   {
-//     id: Math.random(),
-//     eventName: "Running",
-//     description: "Going for a run",
-//     date: "2024-12-03",
-//     time: "12:30 pm",
-//     capacity: "12",
-//     eventType: "Type 2",
-//   },
-//   {
-//     id: Math.random(),
-//     eventName: "Walking",
-//     description: "Going for a run",
-//     date: "2024-12-03",
-//     time: "12:30 pm",
-//     capacity: "12",
-//     eventType: "Type 2",
-//   },
-//   {
-//     id: Math.random(),
-//     eventName: "Studying",
-//     description: "Going for a run",
-//     date: "2024-12-03",
-//     time: "12:30 pm",
-//     capacity: "12",
-//     eventType: "Type 2",
-//   },
-// ];
-
 export default function Events() {
   const [events, setEvents] = useState([]);
 
@@ -38,32 +8,39 @@ export default function Events() {
     getEvents();
   }, []);
 
-  function getEvents() {
-    fetch(`/api/get-events`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        const { result } = data;
-        console.log(data.result.rows);
-        setEvents(result?.rows);
-      })
-      .catch((error) => console.log(error.message));
+  async function getEvents() {
+    try {
+      await fetch(`/api/get-events`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          const { result } = data;
+          console.log(data.result.rows);
+          setEvents(result?.rows);
+        });
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
-  function joinHandler(eventId: number) {
+  async function joinHandler(eventId: any) {
     // Do a get query to check if an event exists where userId and eventId match the table in the db.
-    fetch(`/api/join-event`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ eventId }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        const { result } = data;
-      });
+    try {
+      await fetch(`/api/join-event`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ eventId }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          // const { result } = data;
+        });
+    } catch (error) {
+      console.error("Error:", error);
+    }
     // if there is no match then the user can join
     // else the user cannot join again
   }
@@ -82,6 +59,7 @@ export default function Events() {
             </p>
             <p className="mt-2">Capacity: {event.capacity}</p>
             <p className="mt-2">Event Type: {event.eventtype}</p>
+
             <button onClick={() => joinHandler(event.eventid)}>
               Join Event
             </button>

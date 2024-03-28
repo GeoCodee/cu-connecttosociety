@@ -13,12 +13,13 @@ export async function POST(req: Request) {
     // can't join an event that the user already joined
     // subtract 1 to capacity
 
-    console.log(userId);
-    console.log(eventId);
+    // console.log(body);
+    // console.log(userId);
+    // console.log(eventId);
 
     const result =
       await sql`SELECT userid,eventid FROM EVENT_PARTICIPATION WHERE
-        userId = ${userId} AND eventId = ${eventId}`;
+    userId = ${userId} AND eventId = ${eventId}`;
 
     if (result.rowCount == 0) {
       const addUser =

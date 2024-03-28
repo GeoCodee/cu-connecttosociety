@@ -8,9 +8,9 @@ export default function EventForm() {
   const description = useRef<HTMLTextAreaElement>(null);
   const date = useRef<HTMLInputElement>(null);
   const time = useRef<HTMLInputElement>(null);
+  const location = useRef<HTMLInputElement>(null);
   const capacity = useRef<HTMLInputElement>(null);
   const eventType = useRef<HTMLSelectElement>(null);
-  const location = useRef<HTMLInputElement>(null);
 
   async function onSubmit(e: any) {
     e.preventDefault();
@@ -19,6 +19,7 @@ export default function EventForm() {
       description: description.current?.value,
       date: date.current?.value,
       time: time.current?.value,
+      location: location.current?.value,
       capacity: capacity.current?.value,
       eventType: eventType.current?.value,
     };
