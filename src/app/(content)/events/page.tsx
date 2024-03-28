@@ -74,11 +74,12 @@ export default function Events() {
         return (
           <div key={event.eventid} className="bg-gray-100 p-4 rounded-md">
             <h3 className="text-lg font-bold">{event.eventname}</h3>
+            <p className="mt-2">{event.location}</p>
             <p className="mt-2">{event.description}</p>
             <p className="mt-2">
               <span className="font-bold">{event.eventdate}</span>
               <span className="mx-2">at</span>
-              {event.eventtime}evetn
+              {event.eventtime}
             </p>
             <p className="mt-2">Capacity: {event.capacity}</p>
             <p className="mt-2">Event Type: {event.eventtype}</p>
