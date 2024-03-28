@@ -6,8 +6,7 @@ export async function GET(request: Request) {
     // await sql`DROP TABLE IF EXISTS EVENT`;
 
     const result = await sql`
-              SELECT * FROM EVENT
-            
+              SELECT * FROM EVENT;
             `;
     return NextResponse.json({ result }, { status: 200 });
   } catch (error) {
