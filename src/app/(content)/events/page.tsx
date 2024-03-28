@@ -35,6 +35,7 @@ export default function Events() {
       })
         .then((response) => response.json())
         .then((data) => {
+          getEvents();
           console.log(data);
           // const { result } = data;
         });

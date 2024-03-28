@@ -14,7 +14,7 @@ export async function GET(request: Request) {
     //           SELECT * FROM EVENT;
     //         `;
 
-    console.log(userId);
+    // console.log(userId);
 
     //only select events that have capaciy > 0
     //only select events that doesn't have userId and eventId in event_particiption
