@@ -4,20 +4,13 @@ import { useRef } from "react";
 import { redirect } from "next/navigation";
 
 export default function EventForm() {
-  // const eventName = useRef<HTMLDivElement>(null);
-  // const description = useRef<HTMLDivElement>(null);
-  // const date = useRef<HTMLDivElement>(null);
-  // const time = useRef<HTMLDivElement>(null);
-  // const capacity = useRef<HTMLDivElement>(null);
-  // const eventType = useRef<HTMLDivElement>(null);
-
   const eventName = useRef<HTMLInputElement>(null);
   const description = useRef<HTMLTextAreaElement>(null);
   const date = useRef<HTMLInputElement>(null);
   const time = useRef<HTMLInputElement>(null);
-  const location = useRef<HTMLInputElement>(null);
   const capacity = useRef<HTMLInputElement>(null);
   const eventType = useRef<HTMLSelectElement>(null);
+  const location = useRef<HTMLInputElement>(null);
 
   async function onSubmit(e: any) {
     e.preventDefault();
@@ -26,7 +19,6 @@ export default function EventForm() {
       description: description.current?.value,
       date: date.current?.value,
       time: time.current?.value,
-      location: location.current?.value,
       capacity: capacity.current?.value,
       eventType: eventType.current?.value,
     };
@@ -56,6 +48,7 @@ export default function EventForm() {
           type="text"
           id="event-name"
           className="mt-1 p-2 border rounded w-full"
+          required
         />
       </div>
       <div className="mb-4">
@@ -66,7 +59,20 @@ export default function EventForm() {
           ref={description}
           id="description"
           className="mt-1 p-2 border rounded w-full"
+          required
         ></textarea>
+      </div>
+      <div className="mb-4">
+        <label htmlFor="event-location" className="block">
+          Where is the Event?
+        </label>
+        <input
+          ref={location}
+          type="text"
+          id="event-location"
+          className="mt-1 p-2 border rounded w-full"
+          required
+        />
       </div>
       <div className="mb-4">
         <label htmlFor="event-date" className="block">
@@ -77,6 +83,7 @@ export default function EventForm() {
           type="date"
           id="event-date"
           className="mt-1 p-2 border rounded w-full"
+          required
         />
       </div>
       <div className="mb-4">
@@ -88,20 +95,9 @@ export default function EventForm() {
           type="time"
           id="event-time"
           className="mt-1 p-2 border rounded w-full"
+          required
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="event-locaaion" className="block">
-          Where is the location?
-        </label>
-        <input
-          ref={location}
-          type="text"
-          id="capacity"
-          className="mt-1 p-2 border rounded w-full"
-        />
-      </div>
-
       <div className="mb-4">
         <label htmlFor="capacity" className="block">
           How many people can join the event?
@@ -111,6 +107,7 @@ export default function EventForm() {
           type="number"
           id="capacity"
           className="mt-1 p-2 border rounded w-full"
+          required
         />
       </div>
       <div className="mb-4">
@@ -121,6 +118,7 @@ export default function EventForm() {
           ref={eventType}
           id="typeOfEvent"
           className="mt-1 p-2 border rounded w-full"
+          required
         >
           <option>Type 1</option>
           <option>Type 2</option>

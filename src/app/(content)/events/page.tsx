@@ -78,7 +78,7 @@ export default function Events() {
             <p className="mt-2">
               <span className="font-bold">{event.eventdate}</span>
               <span className="mx-2">at</span>
-              {event.eventtime}
+              {event.eventtime}evetn
             </p>
             <p className="mt-2">Capacity: {event.capacity}</p>
             <p className="mt-2">Event Type: {event.eventtype}</p>
