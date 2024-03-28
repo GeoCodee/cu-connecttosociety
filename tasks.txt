@@ -5,3 +5,9 @@ Status: In Progress
 Status: In progress
 // Display the users who joined the event
 - Include user profiles in event card
+
+
+// Send email for confirmation/reminder
+
+//    
+

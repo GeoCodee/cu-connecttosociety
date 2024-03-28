@@ -1,13 +1,9 @@
 "use client";
 
-
 import Map from "@/components/Map";
 import { useUrlPosition } from "/Users/mymac/Desktop/CapstoneProject/cu-connecttosociety/src/components/hooks/useUrlPosition";
-
-import Link from "next/link";
-import { redirect } from "next/navigation";
 import { useRef, useEffect, useState } from "react";
-import 'leaflet/dist/leaflet.css';
+import "leaflet/dist/leaflet.css";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
@@ -34,18 +30,18 @@ export default function EventForm() {
               "That doesn't seem like a city. Click somewhere else :("
             );
           }
-          console.log(data)
+          console.log(data);
           setCityName(data.city || "");
           // setCountry(data.countryName);
           // setEmoji(convertToEmoji(data.countryCode));
         })
-        .catch((error) => console.log(error.message))
-        // .finally(() => setIsLoadingGeocoding(false));
+        .catch((error) => console.log(error.message));
+      // .finally(() => setIsLoadingGeocoding(false));
     },
     [lat, lng]
   );
 
-  function onSubmit(e: any) {
+  async function onSubmit(e: any) {
     e.preventDefault();
     const newEvent = {
       eventName: eventName.current?.value,
@@ -54,114 +50,118 @@ export default function EventForm() {
       time: time.current?.value,
       capacity: capacity.current?.value,
       eventType: eventType.current?.value,
-      location: cityName
+      location: cityName,
     };
-    console.log(newEvent);
-    fetch("/api/add-event", {
-      method: "POST",
-      body: JSON.stringify(newEvent),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    // window.location.href = "./events";
+    try {
+      await fetch("/api/add-event", {
+        method: "POST",
+        body: JSON.stringify(newEvent),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      window.location.href = "/events";
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
   return (
-      <form onSubmit={onSubmit} className="max-w-lg mx-auto mt-4">
-        <div className="mb-4">
-          <label htmlFor="event-name" className="block">
-            Event Name
-          </label>
-          <input
-            ref={eventName}
-            type="text"
-            id="event-name"
-            className="mt-1 p-2 border rounded w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="description" className="block">
-            Event Description
-          </label>
-          <textarea
-            ref={description}
-            id="description"
-            className="mt-1 p-2 border rounded w-full"
-            required
-          ></textarea>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="event-location" className="block">
-            Where is the Event?
-          </label>
-          {/* <input
+    <form onSubmit={onSubmit} className="max-w-lg mx-auto mt-4">
+      <div className="mb-4">
+        <label htmlFor="event-name" className="block">
+          Event Name
+        </label>
+        <input
+          ref={eventName}
+          type="text"
+          id="event-name"
+          className="mt-1 p-2 border rounded w-full"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="description" className="block">
+          Event Description
+        </label>
+        <textarea
+          ref={description}
+          id="description"
+          className="mt-1 p-2 border rounded w-full"
+          required
+        ></textarea>
+      </div>
+      <div className="mb-4">
+        <label htmlFor="event-location" className="block">
+          Where is the Event?
+        </label>
+        {/* <input
             ref={location}
             type="text"
             id="event-location"
             className="mt-1 p-2 border rounded w-full"
             required
           /> */}
-          <Map/>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="event-date" className="block">
-            When is the Event?
-          </label>
-          <input
-            ref={date}
-            type="date"
-            id="event-date"
-            className="mt-1 p-2 border rounded w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="event-time" className="block">
-            What time is the Event?
-          </label>
-          <input
-            ref={time}
-            type="time"
-            id="event-time"
-            className="mt-1 p-2 border rounded w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="capacity" className="block">
-            How many people can join the event?
-          </label>
-          <input
-            ref={capacity}
-            type="number"
-            id="capacity"
-            className="mt-1 p-2 border rounded w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="typeOfEvent" className="block">
-            What type of event is this event?
-          </label>
-          <select
-            ref={eventType}
-            id="typeOfEvent"
-            className="mt-1 p-2 border rounded w-full"
-            required
-          >
-            <option>Type 1</option>
-            <option>Type 2</option>
-            <option>Type 3</option>
-          </select>
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
+        <Map />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="event-date" className="block">
+          When is the Event?
+        </label>
+        <input
+          ref={date}
+          type="date"
+          id="event-date"
+          className="mt-1 p-2 border rounded w-full"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="event-time" className="block">
+          What time is the Event?
+        </label>
+        <input
+          ref={time}
+          type="time"
+          id="event-time"
+          className="mt-1 p-2 border rounded w-full"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="capacity" className="block">
+          How many people can join the event?
+        </label>
+        <input
+          ref={capacity}
+          type="number"
+          id="capacity"
+          className="mt-1 p-2 border rounded w-full"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="typeOfEvent" className="block">
+          What type of event is this event?
+        </label>
+        <select
+          ref={eventType}
+          id="typeOfEvent"
+          className="mt-1 p-2 border rounded w-full"
+          required
         >
-          Add Event
-        </button>
-      </form>
+          <option>Type 1</option>
+          <option>Type 2</option>
+          <option>Type 3</option>
+        </select>
+      </div>
+      <button
+        type="submit"
+        className="bg-blue-500 text-white py-2 px-4 rounded"
+      >
+        Add Event
+      </button>
+    </form>
   );
 }
