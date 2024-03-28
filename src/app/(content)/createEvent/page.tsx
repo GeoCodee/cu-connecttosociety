@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { redirect } from "next/navigation";
 
 export default function EventForm() {
   // const eventName = useRef<HTMLDivElement>(null);
@@ -18,7 +19,7 @@ export default function EventForm() {
   const capacity = useRef<HTMLInputElement>(null);
   const eventType = useRef<HTMLSelectElement>(null);
 
-  function onSubmit(e: any) {
+  async function onSubmit(e: any) {
     e.preventDefault();
     const newEvent = {
       eventName: eventName.current?.value,
@@ -29,13 +30,19 @@ export default function EventForm() {
       capacity: capacity.current?.value,
       eventType: eventType.current?.value,
     };
-    fetch("/api/add-event", {
-      method: "POST",
-      body: JSON.stringify(newEvent),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      await fetch("/api/add-event", {
+        method: "POST",
+        body: JSON.stringify(newEvent),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      window.location.href = "/events";
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
   return (
