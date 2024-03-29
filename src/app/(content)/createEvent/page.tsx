@@ -1,7 +1,7 @@
 "use client";
 
 import Map from "@/components/Map";
-import { useUrlPosition } from "/Users/mymac/Desktop/CapstoneProject/cu-connecttosociety/src/components/hooks/useUrlPosition";
+import { useUrlPosition } from "@/components/hooks/useUrlPosition";
 import { useRef, useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 
