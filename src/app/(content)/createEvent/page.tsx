@@ -61,7 +61,9 @@ export default function EventForm() {
         },
       });
 
-      window.location.href = "/events";
+      if (typeof window !== "undefined") {
+        window.location.href = "/events";
+      }
     } catch (error) {
       console.error("Error:", error);
     }
