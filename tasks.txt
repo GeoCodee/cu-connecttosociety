@@ -1,4 +1,4 @@
-Status: In Progress
+Status: Done
 //Make sure the event doesn't get over the capacity
 - Subtract 1 to the event capacity every time a user join
 

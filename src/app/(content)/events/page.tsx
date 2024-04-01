@@ -1,8 +1,21 @@
 "use client";
 import { useEffect, useState } from "react";
+import { ToastContainer, Bounce, toast } from "react-toastify";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
+
+  const toastProperties: any = {
+    position: "top-right",
+    autoClose: 1500,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    transition: Bounce,
+  };
 
   useEffect(function () {
     getEvents();
@@ -35,8 +48,9 @@ export default function Events() {
       })
         .then((response) => response.json())
         .then((data) => {
+          toast.success(data.resultProperties.message, toastProperties);
           getEvents();
-          console.log(data);
+          // console.log(data);
           // const { result } = data;
         });
     } catch (error) {
@@ -47,26 +61,43 @@ export default function Events() {
   }
 
   return (
-    <div className="flex flex-wrap gap-4">
-      {events.map((event: any) => {
-        return (
-          <div key={event.eventid} className="bg-gray-100 p-4 rounded-md">
-            <h3 className="text-lg font-bold">{event.eventname}</h3>
-            <p className="mt-2">{event.description}</p>
-            <p className="mt-2">
-              <span className="font-bold">{event.eventdate}</span>
-              <span className="mx-2">at</span>
-              {event.eventtime}
-            </p>
-            <p className="mt-2">Capacity: {event.capacity}</p>
-            <p className="mt-2">Event Type: {event.eventtype}</p>
+    <div>
+      <div>
+        <ToastContainer
+          position="top-right"
+          autoClose={1500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          // transition: Bounce,
+        />
+      </div>
+      <div className="flex flex-wrap gap-4">
+        {events.map((event: any) => {
+          return (
+            <div key={event.eventid} className="bg-gray-100 p-4 rounded-md">
+              <h3 className="text-lg font-bold">{event.eventname}</h3>
+              <p className="mt-2">{event.description}</p>
+              <p className="mt-2">
+                <span className="font-bold">{event.eventdate}</span>
+                <span className="mx-2">at</span>
+                {event.eventtime}
+              </p>
+              <p className="mt-2">Capacity: {event.capacity}</p>
+              <p className="mt-2">Event Type: {event.eventtype}</p>
 
-            <button onClick={() => joinHandler(event.eventid)}>
-              Join Event
-            </button>
-          </div>
-        );
-      })}
+              <button onClick={() => joinHandler(event.eventid)}>
+                Join Event
+              </button>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
