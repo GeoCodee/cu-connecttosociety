@@ -3,6 +3,7 @@
 import Map from "@/components/Map";
 import { useUrlPosition } from "@/components/hooks/useUrlPosition";
 import { useRef, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import "leaflet/dist/leaflet.css";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
@@ -61,7 +62,7 @@ export default function EventForm() {
         },
       });
 
-      if (typeof window !== "undefined") {
+      if (typeof window !== undefined) {
         window.location.href = "/events";
       }
     } catch (error) {
