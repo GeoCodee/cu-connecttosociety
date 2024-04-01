@@ -1,16 +1,45 @@
 "use client";
 
-import { useRef } from "react";
-import { redirect } from "next/navigation";
+import Map from "@/components/Map";
+import { useUrlPosition } from "@/components/hooks/useUrlPosition";
+import { useRef, useEffect, useState } from "react";
+import "leaflet/dist/leaflet.css";
+
+const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
 export default function EventForm() {
   const eventName = useRef<HTMLInputElement>(null);
   const description = useRef<HTMLTextAreaElement>(null);
   const date = useRef<HTMLInputElement>(null);
   const time = useRef<HTMLInputElement>(null);
-  const location = useRef<HTMLInputElement>(null);
   const capacity = useRef<HTMLInputElement>(null);
   const eventType = useRef<HTMLSelectElement>(null);
+  const location = useRef<HTMLInputElement>(null);
+  const [lat, lng] = useUrlPosition();
+  const [cityName, setCityName] = useState("");
+
+  useEffect(
+    function () {
+      // setIsLoadingGeocoding(true);
+      // setGeocodingError("");
+      fetch(`${BASE_URL}?latitude=${lat}&longitude=${lng}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (!data.countryCode) {
+            throw new Error(
+              "That doesn't seem like a city. Click somewhere else :("
+            );
+          }
+          console.log(data);
+          setCityName(data.city || "");
+          // setCountry(data.countryName);
+          // setEmoji(convertToEmoji(data.countryCode));
+        })
+        .catch((error) => console.log(error.message));
+      // .finally(() => setIsLoadingGeocoding(false));
+    },
+    [lat, lng]
+  );
 
   async function onSubmit(e: any) {
     e.preventDefault();
@@ -19,9 +48,9 @@ export default function EventForm() {
       description: description.current?.value,
       date: date.current?.value,
       time: time.current?.value,
-      location: location.current?.value,
       capacity: capacity.current?.value,
       eventType: eventType.current?.value,
+      location: cityName,
     };
     try {
       await fetch("/api/add-event", {
@@ -67,13 +96,14 @@ export default function EventForm() {
         <label htmlFor="event-location" className="block">
           Where is the Event?
         </label>
-        <input
-          ref={location}
-          type="text"
-          id="event-location"
-          className="mt-1 p-2 border rounded w-full"
-          required
-        />
+        {/* <input
+            ref={location}
+            type="text"
+            id="event-location"
+            className="mt-1 p-2 border rounded w-full"
+            required
+          /> */}
+        <Map />
       </div>
       <div className="mb-4">
         <label htmlFor="event-date" className="block">

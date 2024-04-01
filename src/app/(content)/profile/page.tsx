@@ -1,9 +1,6 @@
 "use client";
-
-import { UserButton } from "@clerk/nextjs";
-import { User } from "@clerk/nextjs/server";
-import Image from "next/image";
-
 export default function Home() {
-  return <div>Test Profile</div>;
+  return (
+    <div className="h-screen overflow-hidden py-10 overscroll-none flex relative"></div>
+  );
 }
