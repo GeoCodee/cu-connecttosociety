@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { ToastContainer, Bounce, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
@@ -13,7 +14,7 @@ export default function Events() {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "light",
+    theme: "dark",
     transition: Bounce,
   };
 
@@ -26,9 +27,9 @@ export default function Events() {
       await fetch(`/api/get-events`)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           const { result } = data;
-          console.log(data.result.rows);
+          // console.log(data.result.rows);
           setEvents(result?.rows);
         });
     } catch (error) {
@@ -48,8 +49,8 @@ export default function Events() {
       })
         .then((response) => response.json())
         .then((data) => {
-          toast.success(data.resultProperties.message, toastProperties);
           getEvents();
+          toast.success(data.returnProperties.message, toastProperties);
           // console.log(data);
           // const { result } = data;
         });
@@ -63,26 +64,14 @@ export default function Events() {
   return (
     <div>
       <div>
-        <ToastContainer
-          position="top-right"
-          autoClose={1500}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-          // transition: Bounce,
-        />
+        <ToastContainer></ToastContainer>
       </div>
       <div className="flex flex-wrap gap-4">
         {events.map((event: any) => {
           return (
             <div key={event.eventid} className="bg-gray-100 p-4 rounded-md">
               <h3 className="text-lg font-bold">{event.eventname}</h3>
-            <p className="mt-2">{event.location}</p>
+              <p className="mt-2">{event.location}</p>
               <p className="mt-2">{event.description}</p>
               <p className="mt-2">
                 <span className="font-bold">{event.eventdate}</span>
