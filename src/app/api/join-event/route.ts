@@ -19,9 +19,12 @@ export async function POST(req: Request) {
     // console.log(eventId);
     const mailProperties: MailProperties = {
       to: "geofornoles897@gmail.com",
-      name: "TestCU",
+      eventName: "CU first Mail",
+      organizerName: "Geo",
+      eventDescription: "Celebrate first email",
+      eventLocation: "Virtual",
       subject: "Test CU",
-      body: "<h1>This is a test</h1>",
+      // body: "<h1>This is a test</h1>",
     };
 
     const result =

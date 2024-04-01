@@ -1,13 +1,23 @@
 import nodemailer from "nodemailer";
-
+import * as handlebars from "handlebars";
+import { confirmationEmail } from "./templates/confirmation";
 export interface MailProperties {
   to: string;
-  name: string;
+  eventName: string;
+  organizerName: string;
+  eventDescription: string;
+  eventLocation: string;
   subject: string;
-  body: string;
 }
 
-export async function sendMail({ to, name, subject, body }: MailProperties) {
+export async function sendMail({
+  to,
+  organizerName,
+  eventName,
+  eventDescription,
+  eventLocation,
+  subject,
+}: MailProperties) {
   const { SMTP_EMAIL, SMTP_PASSWORD } = process.env;
   const transport = nodemailer.createTransport({
     service: "gmail",
@@ -29,7 +39,14 @@ export async function sendMail({ to, name, subject, body }: MailProperties) {
       from: SMTP_EMAIL,
       to,
       subject,
-      html: body,
+      html: compileConfirmationEmail({
+        to,
+        organizerName,
+        eventDescription,
+        eventName,
+        eventLocation,
+        subject,
+      }),
     });
     console.log(sendResult);
   } catch (error) {}
@@ -38,3 +55,15 @@ export async function sendMail({ to, name, subject, body }: MailProperties) {
 export const sendConfirmationEmail = async (mailProperties: MailProperties) => {
   await sendMail(mailProperties);
 };
+
+export function compileConfirmationEmail(mailProperties: MailProperties) {
+  const template = handlebars.compile(confirmationEmail);
+  const htmlBody = template({
+    eventName: mailProperties.eventName,
+    organizerName: mailProperties.organizerName,
+    eventDescription: mailProperties.eventDescription,
+    eventLocation: mailProperties.eventLocation,
+  });
+
+  return htmlBody;
+}
