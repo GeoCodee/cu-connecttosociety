@@ -1,4 +1,5 @@
 "use client";
+import { sendMail, MailProperties } from "@/lib/mail";
 import { useEffect, useState } from "react";
 import { ToastContainer, Bounce, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -57,8 +58,6 @@ export default function Events() {
     } catch (error) {
       console.error("Error:", error);
     }
-    // if there is no match then the user can join
-    // else the user cannot join again
   }
 
   return (

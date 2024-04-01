@@ -1,3 +1,4 @@
+import { MailProperties, sendConfirmationEmail } from "@/lib/mail";
 import { auth } from "@clerk/nextjs";
 import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
@@ -16,6 +17,12 @@ export async function POST(req: Request) {
     // console.log(body);
     // console.log(userId);
     // console.log(eventId);
+    const mailProperties: MailProperties = {
+      to: "geofornoles897@gmail.com",
+      name: "TestCU",
+      subject: "Test CU",
+      body: "<h1>This is a test</h1>",
+    };
 
     const result =
       await sql`SELECT userid,eventid FROM EVENT_PARTICIPATION WHERE
@@ -31,13 +38,17 @@ export async function POST(req: Request) {
       let returnProperties = {
         message: "User joined event successfully",
         resultInfo: [addUser, subtractCapacity],
+        isSuccessful: 1,
       };
+
+      sendConfirmationEmail(mailProperties);
 
       return NextResponse.json({ returnProperties }, { status: 200 });
     } else {
       let returnProperties = {
         message: "User is already part of the event",
         resultInfo: result,
+        isSucessFul: 0,
       };
       return NextResponse.json({ returnProperties }, { status: 200 });
     }

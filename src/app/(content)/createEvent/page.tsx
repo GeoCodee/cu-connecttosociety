@@ -9,6 +9,8 @@ import "leaflet/dist/leaflet.css";
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
 export default function EventForm() {
+  // const router = useRouter();
+
   const eventName = useRef<HTMLInputElement>(null);
   const description = useRef<HTMLTextAreaElement>(null);
   const date = useRef<HTMLInputElement>(null);
@@ -65,6 +67,8 @@ export default function EventForm() {
       if (typeof window !== undefined) {
         window.location.href = "/events";
       }
+      // redirect("/events");
+      // router.push("/events");
     } catch (error) {
       console.error("Error:", error);
     }
