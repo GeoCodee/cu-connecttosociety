@@ -7,6 +7,15 @@
     /* Dark background color */
     position: relative;
 }
+.eventsMapContainer {
+    width: 100%;
+    /* Set the container width to 300px */
+    height: 700px;
+    /* Set the container height to 300px */
+    background-color: #333;
+    /* Dark background color */
+    position: relative;
+}
 
 .map {
     width: 100%;

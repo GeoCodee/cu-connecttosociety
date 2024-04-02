@@ -14,14 +14,11 @@ export default function EventForm() {
   const time = useRef<HTMLInputElement>(null);
   const capacity = useRef<HTMLInputElement>(null);
   const eventType = useRef<HTMLSelectElement>(null);
-  const location = useRef<HTMLInputElement>(null);
   const [lat, lng] = useUrlPosition();
   const [cityName, setCityName] = useState("");
 
   useEffect(
     function () {
-      // setIsLoadingGeocoding(true);
-      // setGeocodingError("");
       fetch(`${BASE_URL}?latitude=${lat}&longitude=${lng}`)
         .then((response) => response.json())
         .then((data) => {
@@ -30,13 +27,10 @@ export default function EventForm() {
               "That doesn't seem like a city. Click somewhere else :("
             );
           }
-          console.log(data);
-          setCityName(data.city || "");
-          // setCountry(data.countryName);
-          // setEmoji(convertToEmoji(data.countryCode));
+          console.log(data.city);
+          setCityName(data.city || "f");
         })
         .catch((error) => console.log(error.message));
-      // .finally(() => setIsLoadingGeocoding(false));
     },
     [lat, lng]
   );
@@ -50,8 +44,11 @@ export default function EventForm() {
       time: time.current?.value,
       capacity: capacity.current?.value,
       eventType: eventType.current?.value,
-      location: cityName,
+      eventlocation: cityName,
+      lat,
+      lng,
     };
+    console.log(JSON.stringify(newEvent));
     try {
       await fetch("/api/add-event", {
         method: "POST",
@@ -60,7 +57,6 @@ export default function EventForm() {
           "Content-Type": "application/json",
         },
       });
-
       window.location.href = "/events";
     } catch (error) {
       console.error("Error:", error);
@@ -96,13 +92,6 @@ export default function EventForm() {
         <label htmlFor="event-location" className="block">
           Where is the Event?
         </label>
-        {/* <input
-            ref={location}
-            type="text"
-            id="event-location"
-            className="mt-1 p-2 border rounded w-full"
-            required
-          /> */}
         <Map />
       </div>
       <div className="mb-4">

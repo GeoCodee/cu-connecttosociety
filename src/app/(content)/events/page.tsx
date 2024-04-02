@@ -1,8 +1,11 @@
 "use client";
+import EventsMap from "@/components/EventsMap";
 import { useEffect, useState } from "react";
+import "leaflet/dist/leaflet.css";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
+  const [showMap, setShowMap] = useState(false);
 
   useEffect(function () {
     getEvents();
@@ -36,7 +39,6 @@ export default function Events() {
         .then((response) => response.json())
         .then((data) => {
           getEvents();
-          console.log(data);
           // const { result } = data;
         });
     } catch (error) {
@@ -48,11 +50,14 @@ export default function Events() {
 
   return (
     <div className="flex flex-wrap gap-4">
-      {events.map((event: any) => {
-        return (
+      <button onClick={() => setShowMap((prev) => !prev)}>Show Map</button>
+      {showMap ? (
+          <EventsMap events={events}/>
+      ) : (
+        events.map((event: any) => (
           <div key={event.eventid} className="bg-gray-100 p-4 rounded-md">
             <h3 className="text-lg font-bold">{event.eventname}</h3>
-            <p className="mt-2">{event.location}</p>
+            <p className="mt-2">{event.eventlocation}</p>
             <p className="mt-2">{event.description}</p>
             <p className="mt-2">
               <span className="font-bold">{event.eventdate}</span>
@@ -66,8 +71,8 @@ export default function Events() {
               Join Event
             </button>
           </div>
-        );
-      })}
+        ))
+      )}
     </div>
   );
 }

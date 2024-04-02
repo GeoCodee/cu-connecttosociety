@@ -13,7 +13,7 @@ import Button from "./Button";
 import { useUrlPosition } from "./hooks/useUrlPosition";
 import { useRouter } from "next/navigation";
 
-export default function Map() {
+export default function EventsMap({ events }) {
   const [mapPosition, setMapPosition] = useState([40, 0]);
   // const { cities } = useCities();
   const {
@@ -28,13 +28,32 @@ export default function Map() {
     if (lat && lng) setMapPosition([parseFloat(lat), parseFloat(lng)]);
   }, [lat, lng]);
 
+  useEffect(function () {
+    getEvents();
+  }, []);
+
+  async function getEvents() {
+    try {
+      await fetch(`/api/get-events`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          const { result } = data;
+          console.log(data.result.rows);
+          setEvents(result?.rows);
+        });
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
   useEffect(() => {
     if (geoLocationPosition)
       setMapPosition([geoLocationPosition.lat, geoLocationPosition.lng]);
   }, [geoLocationPosition]);
 
   return (
-    <div className={styles.mapContainer}>
+    <div className={styles.eventsMapContainer}>
       {!geoLocationPosition && (
         <Button type="position" onClick={getPosition}>
           {isLoadingPosition ? "Loading..." : "Use your position"}
@@ -50,9 +69,16 @@ export default function Map() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={[lat?? 0, lng?? 40]}>
-          <Popup>Pin</Popup>
-        </Marker>
+        {events.map((event) => (
+          <Marker key={event.eventid} position={[event.lat?? 5, event.lng ?? 6]}>
+            <Popup>
+                <span>event.eventname</span>
+                <span>event.eventdata</span>
+                <span>event.eventtime</span>
+            </Popup>
+          </Marker>
+        ))}
+
         <ChangeCenter position={mapPosition} />
         <DetectClick />
       </MapContainer>
@@ -73,9 +99,9 @@ function ChangeCenter({ position }) {
 function DetectClick() {
   const router = useRouter();
   useMapEvents({
-    click: (e) => {
-      router.push(`/createEvent?lat=${e.latlng.lat}&lng=${e.latlng.lng}`);
-    },
+    // click: (e) => {
+    //   router.push(`/createEvent?lat=${e.latlng.lat}&lng=${e.latlng.lng}`);
+    // },
   });
 
   return null;
