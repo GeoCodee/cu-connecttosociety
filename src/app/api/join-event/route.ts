@@ -1,36 +1,43 @@
 import { MailProperties, sendConfirmationEmail } from "@/lib/mail";
-import { auth } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
+import axios from "axios";
+// import { getUserEmailById } from "@/lib/clerkFunction";
+import { stringify } from "querystring";
 
 export async function POST(req: Request) {
   const { userId } = auth();
-  try {
-    const body = await req.json();
+  const user = await currentUser();
 
-    const eventId = body.eventId;
+  const body = await req.json();
 
-    //When joining an event:
-    // can't join an event that the user already joined
-    // subtract 1 to capacity
+  const eventId = body.eventId;
 
-    // console.log(body);
-    // console.log(userId);
-    // console.log(eventId);
-    const mailProperties: MailProperties = {
-      to: "geofornoles897@gmail.com",
-      eventName: "CU first Mail",
-      organizerName: "Geo",
-      eventDescription: "Celebrate first email",
-      eventLocation: "Virtual",
-      subject: "Test CU",
-      // body: "<h1>This is a test</h1>",
-    };
+  const joinerEmail = user?.emailAddresses[0].emailAddress;
+  //When joining an event:
+  // can't join an event that the user already joined
+  // subtract 1 to capacity
 
-    const result =
-      await sql`SELECT userid,eventid FROM EVENT_PARTICIPATION WHERE
+  // console.log(body);
+  // console.log(userId);
+  // console.log(eventId);
+  const eventDetails =
+    await sql`SELECT * FROM EVENT WHERE eventid = ${eventId}`;
+
+  const mailProperties: MailProperties = {
+    to: joinerEmail,
+    eventName: eventDetails.rows[0]["eventName"],
+    organizerName: "Geoffrey Fornoles", //Need to get data
+    eventDescription: eventDetails.rows[0]["description"],
+    eventLocation: eventDetails.rows[0]["eventlocation"],
+    subject: "Confirmation Email",
+    // body: "<h1>This is a test</h1>",
+  };
+
+  const result = await sql`SELECT userid,eventid FROM EVENT_PARTICIPATION WHERE
     userId = ${userId} AND eventId = ${eventId}`;
-
+  try {
     if (result.rowCount == 0) {
       const addUser =
         await sql`INSERT INTO EVENT_PARTICIPATION (userid,eventid) VALUES (${userId},${eventId})`;

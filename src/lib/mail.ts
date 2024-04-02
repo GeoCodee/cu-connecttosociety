@@ -1,13 +1,14 @@
 import nodemailer from "nodemailer";
 import * as handlebars from "handlebars";
 import { confirmationEmail } from "./templates/confirmation";
+
 export interface MailProperties {
-  to: string;
-  eventName: string;
-  organizerName: string;
-  eventDescription: string;
-  eventLocation: string;
-  subject: string;
+  to: any;
+  eventName: any;
+  organizerName: any;
+  eventDescription: any;
+  eventLocation: any;
+  subject: any;
 }
 
 export async function sendMail({

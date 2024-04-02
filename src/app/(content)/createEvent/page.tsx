@@ -4,9 +4,23 @@ import Map from "@/components/Map";
 import { useUrlPosition } from "@/components/hooks/useUrlPosition";
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { toast, Bounce, ToastContainer } from "react-toastify";
 import "leaflet/dist/leaflet.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
+
+const toastProperties: any = {
+  position: "top-right",
+  autoClose: 1500,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: "dark",
+  transition: Bounce,
+};
 
 export default function EventForm() {
   // const router = useRouter();
@@ -64,9 +78,13 @@ export default function EventForm() {
         },
       });
 
+      await toast.success("Event Created Successfully", toastProperties);
+
+      //need to find alternatives for window.location.href
       if (typeof window !== undefined) {
         window.location.href = "/events";
       }
+
       // redirect("/events");
       // router.push("/events");
     } catch (error) {
@@ -75,100 +93,105 @@ export default function EventForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="max-w-lg mx-auto mt-4">
-      <div className="mb-4">
-        <label htmlFor="event-name" className="block">
-          Event Name
-        </label>
-        <input
-          ref={eventName}
-          type="text"
-          id="event-name"
-          className="mt-1 p-2 border rounded w-full"
-          required
-        />
+    <div>
+      <div>
+        <ToastContainer></ToastContainer>
       </div>
-      <div className="mb-4">
-        <label htmlFor="description" className="block">
-          Event Description
-        </label>
-        <textarea
-          ref={description}
-          id="description"
-          className="mt-1 p-2 border rounded w-full"
-          required
-        ></textarea>
-      </div>
-      <div className="mb-4">
-        <label htmlFor="event-location" className="block">
-          Where is the Event?
-        </label>
-        {/* <input
-            ref={location}
+      <form onSubmit={onSubmit} className="max-w-lg mx-auto mt-4">
+        <div className="mb-4">
+          <label htmlFor="event-name" className="block">
+            Event Name
+          </label>
+          <input
+            ref={eventName}
             type="text"
-            id="event-location"
+            id="event-name"
             className="mt-1 p-2 border rounded w-full"
             required
-          /> */}
-        <Map />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="event-date" className="block">
-          When is the Event?
-        </label>
-        <input
-          ref={date}
-          type="date"
-          id="event-date"
-          className="mt-1 p-2 border rounded w-full"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="event-time" className="block">
-          What time is the Event?
-        </label>
-        <input
-          ref={time}
-          type="time"
-          id="event-time"
-          className="mt-1 p-2 border rounded w-full"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="capacity" className="block">
-          How many people can join the event?
-        </label>
-        <input
-          ref={capacity}
-          type="number"
-          id="capacity"
-          className="mt-1 p-2 border rounded w-full"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="typeOfEvent" className="block">
-          What type of event is this event?
-        </label>
-        <select
-          ref={eventType}
-          id="typeOfEvent"
-          className="mt-1 p-2 border rounded w-full"
-          required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="description" className="block">
+            Event Description
+          </label>
+          <textarea
+            ref={description}
+            id="description"
+            className="mt-1 p-2 border rounded w-full"
+            required
+          ></textarea>
+        </div>
+        <div className="mb-4">
+          <label htmlFor="event-location" className="block">
+            Where is the Event?
+          </label>
+          {/* <input
+              ref={location}
+              type="text"
+              id="event-location"
+              className="mt-1 p-2 border rounded w-full"
+              required
+            /> */}
+          <Map />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="event-date" className="block">
+            When is the Event?
+          </label>
+          <input
+            ref={date}
+            type="date"
+            id="event-date"
+            className="mt-1 p-2 border rounded w-full"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="event-time" className="block">
+            What time is the Event?
+          </label>
+          <input
+            ref={time}
+            type="time"
+            id="event-time"
+            className="mt-1 p-2 border rounded w-full"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="capacity" className="block">
+            How many people can join the event?
+          </label>
+          <input
+            ref={capacity}
+            type="number"
+            id="capacity"
+            className="mt-1 p-2 border rounded w-full"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="typeOfEvent" className="block">
+            What type of event is this event?
+          </label>
+          <select
+            ref={eventType}
+            id="typeOfEvent"
+            className="mt-1 p-2 border rounded w-full"
+            required
+          >
+            <option>Type 1</option>
+            <option>Type 2</option>
+            <option>Type 3</option>
+          </select>
+        </div>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white py-2 px-4 rounded"
         >
-          <option>Type 1</option>
-          <option>Type 2</option>
-          <option>Type 3</option>
-        </select>
-      </div>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white py-2 px-4 rounded"
-      >
-        Add Event
-      </button>
-    </form>
+          Add Event
+        </button>
+      </form>
+    </div>
   );
 }
