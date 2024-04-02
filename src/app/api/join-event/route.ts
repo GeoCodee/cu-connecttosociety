@@ -27,7 +27,7 @@ export async function POST(req: Request) {
 
   const mailProperties: MailProperties = {
     to: joinerEmail,
-    eventName: eventDetails.rows[0]["eventName"],
+    eventName: eventDetails.rows[0]["eventname"],
     organizerName: "Geoffrey Fornoles", //Need to get data
     eventDescription: eventDetails.rows[0]["description"],
     eventLocation: eventDetails.rows[0]["eventlocation"],
