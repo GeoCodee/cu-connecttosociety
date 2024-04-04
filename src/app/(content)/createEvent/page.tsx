@@ -5,6 +5,7 @@ import { useUrlPosition } from "@/components/hooks/useUrlPosition";
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { toast, Bounce, ToastContainer } from "react-toastify";
+import MapTest from "@/components/MapTest";
 import "leaflet/dist/leaflet.css";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -133,6 +134,7 @@ export default function EventForm() {
               required
             /> */}
           <Map />
+          {/* <MapTest></MapTest> */}
         </div>
         <div className="mb-4">
           <label htmlFor="event-date" className="block">

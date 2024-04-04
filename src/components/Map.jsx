@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useGeolocation } from "./hooks/useGeolocation";
 import styles from "./Map.module.css";
@@ -13,6 +12,10 @@ import {
 import Button from "./Button";
 import { useUrlPosition } from "./hooks/useUrlPosition";
 import { useRouter } from "next/navigation";
+import "react-toastify/dist/ReactToastify.css";
+import "leaflet/dist/leaflet.css";
+
+import L from "leaflet";
 
 export default function Map() {
   const [mapPosition, setMapPosition] = useState([40, 0]);
@@ -52,6 +55,11 @@ export default function Map() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ChangeCenter position={mapPosition} />
+
+        {/* <PinpointCurrentLocation
+          position={mapPosition}
+        ></PinpointCurrentLocation> */}
+
         <DetectClick />
       </MapContainer>
     </div>
@@ -64,8 +72,19 @@ export default function Map() {
 
 function ChangeCenter({ position }) {
   const map = useMap();
+  // console.log(position);
   map.setView(position);
   return null;
+}
+
+function PinpointCurrentLocation({ position }) {
+  return position === null ? null : (
+    <div>
+      <Marker position={position}>
+        <Popup>Current Address</Popup>
+      </Marker>
+    </div>
+  );
 }
 
 function DetectClick() {
