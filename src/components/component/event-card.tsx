@@ -25,72 +25,27 @@ export interface eventDetails {
   eventStart: any;
   eventEnd: any;
   capacity: any;
+  // joinEvent(eventId: any): void;
 }
 
-const toastProperties: any = {
-  position: "top-right",
-  autoClose: 1500,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: "dark",
-  transition: Bounce,
-};
-
-export default function EventCard(event: eventDetails) {
-  const [events, setEvents] = useState([]);
-  useEffect(function () {
-    getEvents();
-  }, []);
-
-  async function getEvents() {
-    try {
-      await fetch(`/api/get-events`)
-        .then((response) => response.json())
-        .then((data) => {
-          // console.log(data);
-          const { result } = data;
-          // console.log(data.result.rows);
-          setEvents(result?.rows);
-        });
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
-
-  async function joinHandler(eventId: any) {
-    // Do a get query to check if an event exists where userId and eventId match the table in the db.
-    try {
-      await fetch(`/api/join-event`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({ eventId }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          getEvents();
-          toast.success(data.returnProperties.message, toastProperties);
-          // console.log(data);
-          // const { result } = data;
-        });
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
-
+export default function EventCard({
+  eventId,
+  eventName,
+  eventDescription,
+  eventHost,
+  eventLocation,
+  eventDate,
+  eventStart,
+  eventEnd,
+  capacity,
+  joinEvent,
+}: any) {
   return (
     <div>
-      <div>
-        <ToastContainer></ToastContainer>
-      </div>
       <Card className="w-full max-w-sm rounded-xl border ">
         <CardHeader className="p-4">
-          <CardTitle className="text-2xl">{event.capacity}</CardTitle>
-          <CardDescription>{event.eventDescription}</CardDescription>
+          <CardTitle className="text-2xl">{eventName}</CardTitle>
+          <CardDescription>{eventDescription}</CardDescription>
         </CardHeader>
         {/* Only show the content if screen size is medium to large */}
         <CardContent className="hidden md:flex md:items-center md:p-4 md:gap-4 md:border-t">
@@ -109,7 +64,7 @@ export default function EventCard(event: eventDetails) {
             <div className="leading-none">
               <h3 className="font-medium">Host</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                {event.eventHost}
+                {eventHost}
               </p>
             </div>
           </div>
@@ -139,30 +94,27 @@ export default function EventCard(event: eventDetails) {
             <div className="text-sm ">
               <p>
                 <span className="font-medium">Location</span>:{" "}
-                <span>{event.eventLocation}</span>
+                <span>{eventLocation}</span>
               </p>
               <p>
                 <span className="font-medium">Event Date</span>:{" "}
-                <span>{event.eventDate} </span>
+                <span>{eventDate} </span>
               </p>
               <p>
                 <span className="font-medium">Starts</span>:{" "}
-                <time>{event.eventStart}</time>
+                <time>{eventStart}</time>
               </p>
               <p>
                 <span className="font-medium">Ends</span>:{" "}
-                <time>{event.eventEnd}</time>
+                <time>{eventEnd}</time>
               </p>
             </div>
             <div className="flex items-end gap-1 pl-9">
               <UserPlusIcon className="w-5 h-5" />
-              <span className="text-2xl font-semibold">2/40</span>
+              <span className="text-2xl font-semibold">{capacity}</span>
             </div>
             <div className="col-span-2">
-              <Button
-                className="w-full"
-                onClick={() => joinHandler(event.eventId)}
-              >
+              <Button className="w-full" onClick={() => joinEvent(eventId)}>
                 Join Event
               </Button>
             </div>

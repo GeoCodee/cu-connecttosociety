@@ -29,6 +29,7 @@ export async function POST(req: Request) {
   const getUserById = getUserEmailById(user?.id);
   console.log("User Properties: \n");
   console.log("Name:", getUserById);
+  
   const mailProperties: MailProperties = {
     to: joinerEmail,
     eventName: eventDetails.rows[0]["eventname"],

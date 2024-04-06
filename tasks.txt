@@ -16,7 +16,9 @@ Make the backend clerkFunctions work
 
 Status: In progress
 // Display the users who joined the event
-- Include user profiles in event card
+- Include user profiles in event card :UI Done
+
+- fetch the data from database
 
 
 //    
