@@ -1,26 +1,43 @@
-import { auth } from "@clerk/nextjs";
+import { MailProperties, sendConfirmationEmail } from "@/lib/mail";
+import { auth, currentUser } from "@clerk/nextjs";
 import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
+import axios from "axios";
+// import { getUserEmailById } from "@/lib/clerkFunction";
+import { stringify } from "querystring";
 
 export async function POST(req: Request) {
   const { userId } = auth();
-  try {
-    const body = await req.json();
+  const user = await currentUser();
 
-    const eventId = body.eventId;
+  const body = await req.json();
 
-    //When joining an event:
-    // can't join an event that the user already joined
-    // subtract 1 to capacity
+  const eventId = body.eventId;
 
-    // console.log(body);
-    // console.log(userId);
-    // console.log(eventId);
+  const joinerEmail = user?.emailAddresses[0].emailAddress;
+  //When joining an event:
+  // can't join an event that the user already joined
+  // subtract 1 to capacity
 
-    const result =
-      await sql`SELECT userid,eventid FROM EVENT_PARTICIPATION WHERE
+  // console.log(body);
+  // console.log(userId);
+  // console.log(eventId);
+  const eventDetails =
+    await sql`SELECT * FROM EVENT WHERE eventid = ${eventId}`;
+
+  const mailProperties: MailProperties = {
+    to: joinerEmail,
+    eventName: eventDetails.rows[0]["eventname"],
+    organizerName: "Geoffrey Fornoles", //Need to get data
+    eventDescription: eventDetails.rows[0]["description"],
+    eventLocation: eventDetails.rows[0]["eventlocation"],
+    subject: "Confirmation Email",
+    // body: "<h1>This is a test</h1>",
+  };
+
+  const result = await sql`SELECT userid,eventid FROM EVENT_PARTICIPATION WHERE
     userId = ${userId} AND eventId = ${eventId}`;
-
+  try {
     if (result.rowCount == 0) {
       const addUser =
         await sql`INSERT INTO EVENT_PARTICIPATION (userid,eventid) VALUES (${userId},${eventId})`;
@@ -31,13 +48,17 @@ export async function POST(req: Request) {
       let returnProperties = {
         message: "User joined event successfully",
         resultInfo: [addUser, subtractCapacity],
+        isSuccessful: 1,
       };
+
+      sendConfirmationEmail(mailProperties);
 
       return NextResponse.json({ returnProperties }, { status: 200 });
     } else {
       let returnProperties = {
         message: "User is already part of the event",
         resultInfo: result,
+        isSucessFul: 0,
       };
       return NextResponse.json({ returnProperties }, { status: 200 });
     }

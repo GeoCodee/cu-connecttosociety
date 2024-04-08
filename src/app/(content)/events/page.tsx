@@ -1,11 +1,24 @@
 "use client";
-import EventsMap from "@/components/EventsMap";
+import { sendMail, MailProperties } from "@/lib/mail";
 import { useEffect, useState } from "react";
-import "leaflet/dist/leaflet.css";
+import { ToastContainer, Bounce, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
   const [showMap, setShowMap] = useState(false);
+
+  const toastProperties: any = {
+    position: "top-right",
+    autoClose: 1500,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+    transition: Bounce,
+  };
 
   useEffect(function () {
     getEvents();
@@ -16,9 +29,9 @@ export default function Events() {
       await fetch(`/api/get-events`)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           const { result } = data;
-          console.log(data.result.rows);
+          // console.log(data.result.rows);
           setEvents(result?.rows);
         });
     } catch (error) {
@@ -39,40 +52,42 @@ export default function Events() {
         .then((response) => response.json())
         .then((data) => {
           getEvents();
+          toast.success(data.returnProperties.message, toastProperties);
+          // console.log(data);
           // const { result } = data;
         });
     } catch (error) {
       console.error("Error:", error);
     }
-    // if there is no match then the user can join
-    // else the user cannot join again
   }
 
   return (
-    <div className="flex flex-wrap gap-4">
-      <button onClick={() => setShowMap((prev) => !prev)}>Show Map</button>
-      {showMap ? (
-          <EventsMap events={events}/>
-      ) : (
-        events.map((event: any) => (
-          <div key={event.eventid} className="bg-gray-100 p-4 rounded-md">
-            <h3 className="text-lg font-bold">{event.eventname}</h3>
-            <p className="mt-2">{event.eventlocation}</p>
-            <p className="mt-2">{event.description}</p>
-            <p className="mt-2">
-              <span className="font-bold">{event.eventdate}</span>
-              <span className="mx-2">at</span>
-              {event.eventtime}
-            </p>
-            <p className="mt-2">Capacity: {event.capacity}</p>
-            <p className="mt-2">Event Type: {event.eventtype}</p>
+    <div>
+      <div>
+        <ToastContainer></ToastContainer>
+      </div>
+      <div className="flex flex-wrap gap-4">
+        {events.map((event: any) => {
+          return (
+            <div key={event.eventid} className="bg-gray-100 p-4 rounded-md">
+              <h3 className="text-lg font-bold">{event.eventname}</h3>
+              <p className="mt-2">{event.location}</p>
+              <p className="mt-2">{event.description}</p>
+              <p className="mt-2">
+                <span className="font-bold">{event.eventdate}</span>
+                <span className="mx-2">at</span>
+                {event.eventtime}
+              </p>
+              <p className="mt-2">Capacity: {event.capacity}</p>
+              <p className="mt-2">Event Type: {event.eventtype}</p>
 
-            <button onClick={() => joinHandler(event.eventid)}>
-              Join Event
-            </button>
-          </div>
-        ))
-      )}
+              <button onClick={() => joinHandler(event.eventid)}>
+                Join Event
+              </button>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
