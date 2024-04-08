@@ -1,4 +1,5 @@
 import { clerkClient } from "@clerk/nextjs";
+import { sql } from "@vercel/postgres";
 import axios from "axios";
 import { NextResponse } from "next/server";
 

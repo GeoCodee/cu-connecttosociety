@@ -14,6 +14,7 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { useState, useEffect } from "react";
 import { Bounce, ToastContainer, toast } from "react-toastify";
+import { getHostByEventId } from "@/app/api/functions/route";
 
 export interface eventDetails {
   eventId: any;
@@ -28,6 +29,9 @@ export interface eventDetails {
   // joinEvent(eventId: any): void;
 }
 
+//eventPostPic;
+//eventJoinersPic;
+
 export default function EventCard({
   eventId,
   eventName,
@@ -40,6 +44,9 @@ export default function EventCard({
   capacity,
   joinEvent,
 }: any) {
+  const eventHostPic = getHostByEventId(eventId);
+  console.log(eventHostPic);
+
   return (
     <div>
       <Card className="w-full max-w-sm rounded-xl border ">
@@ -110,7 +117,7 @@ export default function EventCard({
               </p>
             </div>
             <div className="flex items-end gap-1 pl-9">
-              <UserPlusIcon className="w-5 h-5" />
+              <UserPlusIcon className="w-5 h-5 mb-2" />
               <span className="text-2xl font-semibold">{capacity}</span>
             </div>
             <div className="col-span-2">
