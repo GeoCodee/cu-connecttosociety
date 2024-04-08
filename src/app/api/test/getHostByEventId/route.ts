@@ -8,24 +8,12 @@ export async function GET(request: Request) {
   try {
     //leave it here, this route will get outdated data from DBb without this line of code for some reason
     let url: string = request.url;
-    // await sql`DROP TABLE IF EXISTS EVENT`;
 
-    // const result = await sql`
-    //           SELECT * FROM EVENT;
-    //         `;
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
 
-    // console.log(userId);
-
-    //only select events that have capaciy > 0
-    //only select events that doesn't have userId and eventId in event_particiption
     const result = await sql`
-        SELECT e.*
-        FROM EVENT e
-        LEFT JOIN EVENT_PARTICIPATION ep 
-            ON e.eventId = ep.eventid 
-            AND ep.userid = ${userId}
-        WHERE e.capacity > 0 
-            AND ep.participationid IS NULL;
+       SELECT userid from EVENT WHERE eventid = ${userId}
       `;
 
     return NextResponse.json({ result }, { status: 200 });

@@ -2,12 +2,24 @@ Status: Done
 //Make sure the event doesn't get over the capacity
 - Subtract 1 to the event capacity every time a user join
 
+Status: Done
+// Send email for confirmation/reminder
+
+Fix/improve create event
+-Include longitude and latitude when storing the event to the database
+-Allow the user to pinpoint the location
+
+Make the backend clerkFunctions work
+-functions inside that file should return values
+
+
+
 Status: In progress
 // Display the users who joined the event
-- Include user profiles in event card
+- Include user profiles in event card :UI Done
 
+- fetch the data from database
 
-// Send email for confirmation/reminder
 
 //    
 

@@ -3,6 +3,7 @@ import { sendMail, MailProperties } from "@/lib/mail";
 import { useEffect, useState } from "react";
 import { ToastContainer, Bounce, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getUserEmailById } from "@/lib/clerkFunction";
 
 export default function Events() {
   const [events, setEvents] = useState([]);

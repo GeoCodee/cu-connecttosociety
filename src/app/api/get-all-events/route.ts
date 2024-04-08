@@ -19,15 +19,8 @@ export async function GET(request: Request) {
     //only select events that have capaciy > 0
     //only select events that doesn't have userId and eventId in event_particiption
     const result = await sql`
-        SELECT e.*
-        FROM EVENT e
-        LEFT JOIN EVENT_PARTICIPATION ep 
-            ON e.eventId = ep.eventid 
-            AND ep.userid = ${userId}
-        WHERE e.capacity > 0 
-            AND ep.participationid IS NULL;
+        SELECT * FROM EVENT
       `;
-
     return NextResponse.json({ result }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
