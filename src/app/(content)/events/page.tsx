@@ -1,13 +1,28 @@
 "use client";
-import { sendMail, MailProperties } from "@/lib/mail";
-import { useEffect, useState } from "react";
-import { ToastContainer, Bounce, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { getUserEmailById } from "@/lib/clerkFunction";
 
-export default function Events() {
+import EventCard from "@/components/component/event-card";
+import { eventDetails } from "@/components/component/event-card";
+import { useState, useEffect } from "react";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+export default function Profile() {
   const [events, setEvents] = useState([]);
-  const [showMap, setShowMap] = useState(false);
+
+  const testDetails: eventDetails = {
+    eventId: 45,
+    eventName: "Test Name",
+    eventDescription: "testDescription",
+    eventHost: "Geo",
+    eventLocation: "Missisauga",
+    eventDate: "2024-04-02",
+    eventStart: "10:00",
+    eventEnd: "12:00",
+    capacity: 2,
+    // joinEvent(eventId) {
+    //   joinHandler(eventId);
+    // },
+  };
 
   const toastProperties: any = {
     position: "top-right",
@@ -32,7 +47,7 @@ export default function Events() {
         .then((data) => {
           // console.log(data);
           const { result } = data;
-          // console.log(data.result.rows);
+          console.log(data.result.rows);
           setEvents(result?.rows);
         });
     } catch (error) {
@@ -63,37 +78,27 @@ export default function Events() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div>
       <div>
-        <ToastContainer />
+        <ToastContainer></ToastContainer>
       </div>
       <div className="flex flex-wrap gap-4">
-        {events.map((event: any) => {
-          return (
-            <div
-              key={event.eventid}
-              className="bg-gray-100 p-4 rounded-md shadow-lg transform transition-transform duration-300 hover:-translate-y-2 flex flex-col justify-center items-center"
-            >
-              <h3 className="text-lg font-bold">{event.eventname}</h3>
-              <p className="mt-2">{event.location}</p>
-              <p className="mt-2">{event.description}</p>
-              <p className="mt-2">
-                <span className="font-bold">{event.eventdate}</span>
-                <span className="mx-2">at</span>
-                {event.eventtime}
-              </p>
-              <p className="mt-2">Capacity: {event.capacity}</p>
-              <p className="mt-2">Event Type: {event.eventtype}</p>
-
-              <button
-                onClick={() => joinHandler(event.eventid)}
-                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              >
-                Join Event
-              </button>
-            </div>
-          );
-        })}
+        {events.map((event: any) => (
+          <EventCard
+            key={event.eventid}
+            eventId={event.eventid}
+            eventName={event.eventname}
+            eventDescription={event.description}
+            eventHost={event.userid}
+            eventLocation={event.eventlocation}
+            eventDate={event.eventdate}
+            eventStart={event.eventtime}
+            // eventEnd={event.eventEnd}
+            capacity={event.capacity}
+            joinEvent={() => joinHandler(event.eventid)}
+          ></EventCard>
+        ))}
+        {/* <EventCard></EventCard> */}
       </div>
     </div>
   );
