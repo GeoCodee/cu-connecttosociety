@@ -10,12 +10,6 @@ export async function GET(request: Request) {
     let url: string = request.url;
     // await sql`DROP TABLE IF EXISTS EVENT`;
 
-    // const result = await sql`
-    //           SELECT * FROM EVENT;
-    //         `;
-
-    // console.log(userId);
-
     //only select events that have capaciy > 0
     //only select events that doesn't have userId and eventId in event_particiption
     const result = await sql`

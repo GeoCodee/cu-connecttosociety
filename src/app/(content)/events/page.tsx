@@ -64,35 +64,37 @@ export default function Events() {
 
   return (
     <div className="flex flex-col justify-center items-center">
-  <div>
-    <ToastContainer />
-  </div>
-  <div className="flex flex-wrap gap-4">
-    {events.map((event: any) => {
-      return (
-        <div key={event.eventid} className="bg-gray-100 p-4 rounded-md shadow-lg transform transition-transform duration-300 hover:-translate-y-2 flex flex-col justify-center items-center">
-          <h3 className="text-lg font-bold">{event.eventname}</h3>
-          <p className="mt-2">{event.location}</p>
-          <p className="mt-2">{event.description}</p>
-          <p className="mt-2">
-            <span className="font-bold">{event.eventdate}</span>
-            <span className="mx-2">at</span>
-            {event.eventtime}
-          </p>
-          <p className="mt-2">Capacity: {event.capacity}</p>
-          <p className="mt-2">Event Type: {event.eventtype}</p>
+      <div>
+        <ToastContainer />
+      </div>
+      <div className="flex flex-wrap gap-4">
+        {events.map((event: any) => {
+          return (
+            <div
+              key={event.eventid}
+              className="bg-gray-100 p-4 rounded-md shadow-lg transform transition-transform duration-300 hover:-translate-y-2 flex flex-col justify-center items-center"
+            >
+              <h3 className="text-lg font-bold">{event.eventname}</h3>
+              <p className="mt-2">{event.location}</p>
+              <p className="mt-2">{event.description}</p>
+              <p className="mt-2">
+                <span className="font-bold">{event.eventdate}</span>
+                <span className="mx-2">at</span>
+                {event.eventtime}
+              </p>
+              <p className="mt-2">Capacity: {event.capacity}</p>
+              <p className="mt-2">Event Type: {event.eventtype}</p>
 
-          <button
-            onClick={() => joinHandler(event.eventid)}
-            className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Join Event
-          </button>
-        </div>
-      );
-    })}
-  </div>
-</div>
-
+              <button
+                onClick={() => joinHandler(event.eventid)}
+                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              >
+                Join Event
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

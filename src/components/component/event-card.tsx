@@ -14,7 +14,6 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { useState, useEffect } from "react";
 import { Bounce, ToastContainer, toast } from "react-toastify";
-import { getHostByEventId } from "@/app/api/functions/route";
 
 export interface eventDetails {
   eventId: any;
@@ -40,12 +39,71 @@ export default function EventCard({
   eventLocation,
   eventDate,
   eventStart,
-  eventEnd,
+  // eventEnd,
   capacity,
   joinEvent,
 }: any) {
-  const eventHostPic = getHostByEventId(eventId);
-  console.log(eventHostPic);
+  const [hostImageUrl, setHostImageUrl] = useState(null);
+  const [participantsImageUrl, setParticipantsImageUrl] = useState<string[]>(
+    []
+  );
+  const [hostName, setHostName] = useState(null);
+
+  useEffect(() => {
+    const fetchHostIcon = async () => {
+      try {
+        const fetchUserIdByEventId = await fetch(
+          `/api/functions/getHostByEventId?eventId=${eventId}`
+        );
+
+        if (!fetchUserIdByEventId.ok) {
+          throw new Error(`Network reponse was not ok`);
+        }
+
+        const hostData = await fetchUserIdByEventId.json();
+        console.log("data: ", hostData);
+
+        setHostImageUrl(hostData.userInfo.imageUrl);
+        setHostName(hostData.userInfo.firstName);
+      } catch (error) {
+        throw new Error(`Can't fetch Host Images`);
+      }
+    };
+
+    const fetchParticipants = async () => {
+      try {
+        const fetchParticipantIdsByEventId = await fetch(
+          `/api/functions/getParticipantsByEventId?eventId=${eventId}`
+        );
+
+        if (!fetchParticipantIdsByEventId.ok) {
+          throw new Error(`Network response was not ok`);
+        }
+
+        const participantsData = await fetchParticipantIdsByEventId.json();
+        console.log("Data:", participantsData);
+
+        const participantsImageUrl: any[] = [];
+
+        participantsData.userIds.map((participant: any) => {
+          console.log(participant);
+          participantsImageUrl.push(participant.imageUrl);
+        });
+
+        setParticipantsImageUrl(participantsImageUrl);
+
+        console.log("Data:", participantsImageUrl);
+      } catch (error) {
+        throw new Error(`Can't fetch Participant Images`);
+      }
+    };
+    // const fetchParticipantsIcons = await fetch(
+    //   `/api/functions/getP`
+    // )
+
+    fetchHostIcon();
+    fetchParticipants();
+  }, [eventId]);
 
   return (
     <div>
@@ -57,43 +115,47 @@ export default function EventCard({
         {/* Only show the content if screen size is medium to large */}
         <CardContent className="hidden md:flex md:items-center md:p-4 md:gap-4 md:border-t">
           <div className="flex items-center gap-2">
-            <Image
-              alt="Host"
-              className="rounded-full"
-              height="40"
-              src="https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yZHM3QVFTYlNVSUJjdlpEZ1UyTWxjekJJVXkifQ?width=160"
-              style={{
-                aspectRatio: "40/40",
-                objectFit: "cover",
-              }}
-              width="40"
-            />
+            {hostImageUrl && (
+              <Image
+                alt="Host"
+                className="rounded-full"
+                height="40"
+                src={hostImageUrl}
+                style={{
+                  aspectRatio: "40/40",
+                  objectFit: "cover",
+                }}
+                width="40"
+              />
+            )}
             <div className="leading-none">
               <h3 className="font-medium">Host</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                {eventHost}
+                {hostName}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2 ml-4">
-            {[1, 2, 3, 4, 5].map((index) => (
-              <Image
-                key={index}
-                title="Test"
-                alt={`User ${index}`}
-                className={`rounded-full ring-2 ring-white`}
-                height={"40"}
-                src="https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yZHM3QVFTYlNVSUJjdlpEZ1UyTWxjekJJVXkifQ?width=160"
-                style={{
-                  aspectRatio: "40/40",
-                  objectFit: "cover",
-                  marginLeft: `-${7 * 2}px`,
-                }}
-                width={"40"}
-              />
-            ))}
+            {participantsImageUrl
+              .slice(0, 5)
+              .map((participantImageUrl, index) => (
+                <Image
+                  key={index}
+                  title="Test"
+                  alt={`User ${index}`}
+                  className={`rounded-full ring-2 ring-white`}
+                  height={"40"}
+                  src={participantImageUrl} // Use the participantImageUrl here
+                  style={{
+                    aspectRatio: "40/40",
+                    objectFit: "cover",
+                    marginLeft: `-${7 * 2}px`,
+                  }}
+                  width={"40"}
+                />
+              ))}
             {/* total numbers of users join */}
-            <span className="text-2xl">+32</span>
+            {/* <span className="text-2xl">+32</span> */}
           </div>
         </CardContent>
         <CardFooter className="p-4 flex justify-between items-center">
@@ -111,10 +173,10 @@ export default function EventCard({
                 <span className="font-medium">Starts</span>:{" "}
                 <time>{eventStart}</time>
               </p>
-              <p>
+              {/* <p>
                 <span className="font-medium">Ends</span>:{" "}
                 <time>{eventEnd}</time>
-              </p>
+              </p> */}
             </div>
             <div className="flex items-end gap-1 pl-9">
               <UserPlusIcon className="w-5 h-5 mb-2" />

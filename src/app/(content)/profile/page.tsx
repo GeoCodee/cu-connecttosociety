@@ -46,7 +46,7 @@ export default function Profile() {
         .then((data) => {
           // console.log(data);
           const { result } = data;
-          // console.log(data.result.rows);
+          console.log(data.result.rows);
           setEvents(result?.rows);
         });
     } catch (error) {
@@ -78,10 +78,21 @@ export default function Profile() {
 
   return (
     <div className="flex flex-wrap gap-4">
-      <EventCard
-        {...testDetails}
-        joinEvent={() => joinHandler(testDetails.eventId)}
-      ></EventCard>
+      {events.map((event: any) => (
+        <EventCard
+          key={event.eventid}
+          eventId={event.eventid}
+          eventName={event.eventname}
+          eventDescription={event.description}
+          eventHost={event.userid}
+          eventLocation={event.eventlocation}
+          eventDate={event.eventdate}
+          eventStart={event.eventtime}
+          // eventEnd={event.eventEnd}
+          capacity={event.capacity}
+          joinEvent={() => joinHandler(event.eventid)}
+        ></EventCard>
+      ))}
       {/* <EventCard></EventCard> */}
     </div>
   );
