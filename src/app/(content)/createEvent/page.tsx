@@ -169,7 +169,7 @@ export default function EventForm() {
             required
           />
         </div>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label htmlFor="typeOfEvent" className="block">
             What type of event is this event?
           </label>
@@ -183,7 +183,7 @@ export default function EventForm() {
             <option>Type 2</option>
             <option>Type 3</option>
           </select>
-        </div>
+        </div> */}
         <button
           type="submit"
           className="bg-blue-500 text-white py-2 px-4 rounded"

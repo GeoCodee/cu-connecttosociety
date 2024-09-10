@@ -54,9 +54,9 @@ export default function Map() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={[lat?? 0, lng?? 40]}>
+        {/* <Marker position={[lat?? 0, lng?? 40]}>
           <Popup>Pin</Popup>
-        </Marker>
+        </Marker> */}
         <ChangeCenter position={mapPosition} />
 
         {/* <PinpointCurrentLocation
