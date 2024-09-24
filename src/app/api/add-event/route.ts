@@ -6,6 +6,7 @@ export async function POST(req: Request) {
   const body = await req.json();
 
   const { userId } = auth();
+
   const description = body.description;
   const eventName = body.eventName;
   const eventLocation = body.location;

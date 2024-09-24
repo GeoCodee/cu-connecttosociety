@@ -9,20 +9,20 @@ import "react-toastify/dist/ReactToastify.css";
 export default function Profile() {
   const [events, setEvents] = useState([]);
 
-  const testDetails: eventDetails = {
-    eventId: 45,
-    eventName: "Test Name",
-    eventDescription: "testDescription",
-    eventHost: "Geo",
-    eventLocation: "Missisauga",
-    eventDate: "2024-04-02",
-    eventStart: "10:00",
-    eventEnd: "12:00",
-    capacity: 2,
-    // joinEvent(eventId) {
-    //   joinHandler(eventId);
-    // },
-  };
+  // const testDetails: eventDetails = {
+  //   eventId: 45,
+  //   eventName: "Test Name",
+  //   eventDescription: "testDescription",
+  //   eventHost: "Geo",
+  //   eventLocation: "Missisauga",
+  //   eventDate: "2024-04-02",
+  //   eventStart: "10:00",
+  //   eventEnd: "12:00",
+  //   capacity: 2,
+  //   // joinEvent(eventId) {
+  //   //   joinHandler(eventId);
+  //   // },
+  // };
 
   const toastProperties: any = {
     position: "top-right",
