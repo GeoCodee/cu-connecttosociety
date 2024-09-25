@@ -23,6 +23,24 @@ const toastProperties: any = {
   transition: Bounce,
 };
 
+const TAGS = [
+  "Sports",
+  "Video Games",
+  "DIY",
+  "Music",
+  "Movies",
+  "Technology",
+  "Travel",
+  "Cooking",
+  "Fitness",
+  "Art",
+  "Photography",
+  "Books",
+  "Fashion",
+  "Health",
+  "Education",
+];
+
 export default function EventForm() {
   // const router = useRouter();
 
@@ -89,6 +107,10 @@ export default function EventForm() {
       console.error("Error:", error);
     }
   }
+
+  const [isSelected, setIsSelected] = useState(null);
+  const [selectedTag, setSelectedTag] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
 
   return (
     <div>
@@ -169,24 +191,34 @@ export default function EventForm() {
             required
           />
         </div>
-        {/* <div className="mb-4">
-          <label htmlFor="typeOfEvent" className="block">
-            What type of event is this event?
-          </label>
-          <select
-            ref={eventType}
-            id="typeOfEvent"
-            className="mt-1 p-2 border rounded w-full"
-            required
-          >
-            <option>Type 1</option>
-            <option>Type 2</option>
-            <option>Type 3</option>
-          </select>
-        </div> */}
+        <div className="flex flex-col justify-start items-center mb-4">
+          <p>Choose the category that fits this event</p>
+          <div className="space-x-2 flex flex-wrap">
+            {TAGS.map((tag) => (
+              <span
+                key={tag}
+                onClick={() => {
+                  if (selectedTags.includes(tag)) {
+                    setSelectedTags(
+                      selectedTags.filter((selectedTag) => selectedTag !== tag)
+                    ); // Deselect
+                  } else {
+                    setSelectedTags([...selectedTags, tag]); // Select
+                  }
+                  // Send selectedTags state to the backend
+                }}
+                className={`${
+                  selectedTags.includes(tag) ? "bg-green-500" : "bg-yellow-500"
+                } my-2 whitespace-nowrap text-slate-100 p-2 rounded-md hover:cursor-pointer`}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
+          className="bg-blue-500 text-white py-2 px-4 rounded self-center"
         >
           Add Event
         </button>
