@@ -1,62 +1,112 @@
 "use client";
 
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
 import Link from "next/link";
+import { MapIcon, UserCircle } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-100 to-green-200">
-      <header className="p-6 flex justify-center items-center bg-white shadow-md">
-        <h1 className="text-3xl font-bold text-green-600">
-          Connect to Society
-        </h1>
+    <div className="min-h-screen bg-blue-950">
+      <header className="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div className="flex items-center space-x-2">
+          <Image
+            src="/placeholder.svg?height=40&width=40"
+            alt="CU Logo"
+            width={40}
+            height={40}
+            className="rounded-full bg-white"
+          />
+          <span className="text-2xl font-bold text-green-400">CU</span>
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="User menu"
+          className="text-green-400 hover:text-green-300"
+        >
+          <UserCircle className="h-6 w-6" />
+        </Button>
       </header>
 
       <main className="container mx-auto px-4 py-12">
-        <Card className="max-w-3xl mx-auto bg-white shadow-lg">
-          <CardHeader className="bg-green-600 text-white rounded-t-lg">
-            <CardTitle className="text-3xl font-bold text-center">
-              Welcome to Connect to Society
-            </CardTitle>
-            <CardDescription className="text-center text-lg text-green-100">
-              Bringing communities together, one connection at a time.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-center p-8">
-            <p className="mb-8 text-gray-700 text-lg">
-              Connect to Society is a platform designed to help you engage with
-              your local community, find events, and make meaningful connections
-              with people around you.
-            </p>
-            <div className="space-y-4 sm:space-y-0 sm:space-x-4 flex flex-col sm:flex-row justify-center">
-              <Link href="/events">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white"
-                >
-                  Explore Events
-                </Button>
-              </Link>
-              <Link href="/createEvent">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full sm:w-auto border-green-500 text-green-500 hover:bg-green-50"
-                >
-                  Create an Event
-                </Button>
-              </Link>
+        <section className="text-center mb-16">
+          <h1 className="text-4xl md:text-6xl font-bold text-green-400 mb-4">
+            Connect to Society
+          </h1>
+          <p className="text-xl md:text-2xl text-green-300 mb-8">
+            Your instant gateway to local experiences and connections
+          </p>
+          <Button
+            size="lg"
+            className="bg-green-500 hover:bg-green-600 text-blue-950"
+          >
+            Get Started
+          </Button>
+        </section>
+
+        <section className="grid md:grid-cols-3 gap-8 mb-16">
+          {[
+            {
+              title: "Instant Access",
+              description: "Join activities happening right now in your area",
+            },
+            {
+              title: "Diverse Experiences",
+              description:
+                "From cooking classes to yoga sessions, find your passion",
+            },
+            {
+              title: "Community Driven",
+              description:
+                "Connect with like-minded individuals and create memories",
+            },
+          ].map((feature, index) => (
+            <div key={index} className="bg-blue-900 p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-green-400 mb-2">
+                {feature.title}
+              </h3>
+              <p className="text-green-300">{feature.description}</p>
             </div>
-          </CardContent>
-        </Card>
+          ))}
+        </section>
+
+        <section className="mb-16 text-center">
+          <h2 className="text-3xl font-bold text-green-400 mb-4">
+            Discover What's Happening Near You
+          </h2>
+          <Link href="/map" passHref>
+            <Button
+              size="lg"
+              className="bg-green-500 hover:bg-green-600 text-blue-950"
+            >
+              <MapIcon className="mr-2 h-5 w-5" />
+              Open Map
+            </Button>
+          </Link>
+        </section>
+
+        <section className="text-center">
+          <h2 className="text-3xl font-bold text-green-400 mb-4">
+            Ready to Connect?
+          </h2>
+          <p className="text-xl text-green-300 mb-8">
+            Join CU today and start exploring the vibrant community around you!
+          </p>
+          <Button
+            size="lg"
+            className="bg-green-500 hover:bg-green-600 text-blue-950"
+          >
+            Sign Up Now
+          </Button>
+        </section>
       </main>
+
+      <footer className="bg-blue-900 text-green-300 py-8 mt-16">
+        <div className="container mx-auto px-4 text-center">
+          <p>&copy; 2024 CU - Connect to Society. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 }

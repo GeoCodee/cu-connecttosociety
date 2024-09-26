@@ -12,7 +12,14 @@ import {
 } from "@/components/ui/card";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 
 export interface eventDetails {
@@ -35,11 +42,9 @@ export default function EventCard({
   eventId,
   eventName,
   eventDescription,
-  eventHost,
   eventLocation,
   eventDate,
   eventStart,
-  // eventEnd,
   capacity,
   joinEvent,
 }: any) {
@@ -106,95 +111,104 @@ export default function EventCard({
   }, [eventId]);
 
   return (
-    <div>
-      <Card className="w-full max-w-sm rounded-xl border ">
-        <CardHeader className="p-4">
-          <CardTitle className="text-2xl">{eventName}</CardTitle>
-          <CardDescription>{eventDescription}</CardDescription>
-        </CardHeader>
-        {/* Only show the content if screen size is medium to large */}
-        <CardContent className="hidden md:flex md:items-center md:p-4 md:gap-4 md:border-t">
+    <Dialog>
+      <DialogTrigger asChild>
+        <Card className="w-full max-w-[280px] h-[180px] rounded-lg border flex flex-col overflow-hidden cursor-pointer">
+          <CardHeader className="p-2 space-y-0.5 flex-shrink-0">
+            <CardTitle className="text-base font-bold truncate">
+              {eventName}
+            </CardTitle>
+            <CardDescription className="text-xs line-clamp-1">
+              {eventDescription}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-2 flex-grow text-xs space-y-1">
+            <div className="flex items-center gap-1">
+              <CalendarIcon className="w-3 h-3" />
+              <span>
+                {eventDate} at {eventStart}
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <MapPinIcon className="w-3 h-3" />
+              <span className="truncate">{eventLocation}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <UserGroupIcon className="w-3 h-3" />
+              <span>{capacity} spots</span>
+            </div>
+          </CardContent>
+          <CardFooter className="p-2 border-t">
+            <Button
+              className="w-full py-1 text-xs"
+              onClick={(e) => {
+                e.stopPropagation();
+                joinEvent(eventId);
+              }}
+            >
+              Join Event
+            </Button>
+          </CardFooter>
+        </Card>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{eventName}</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <p className="text-sm">{eventDescription}</p>
           <div className="flex items-center gap-2">
-            {hostImageUrl && (
-              <Image
-                alt="Host"
-                className="rounded-full"
-                height="40"
-                src={hostImageUrl}
-                style={{
-                  aspectRatio: "40/40",
-                  objectFit: "cover",
-                }}
-                width="40"
-              />
-            )}
-            <div className="leading-none">
-              <h3 className="font-medium">Host</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                {hostName}
-              </p>
+            <CalendarIcon className="w-4 h-4" />
+            <span>
+              {eventDate} at {eventStart}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <MapPinIcon className="w-4 h-4" />
+            <span>{eventLocation}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <UserGroupIcon className="w-4 h-4" />
+            <span>{capacity} spots</span>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-2">Host</h3>
+            <div className="flex items-center gap-2">
+              {hostImageUrl && (
+                <Image
+                  src={hostImageUrl}
+                  alt={hostName || "Host"}
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                />
+              )}
+              <span>{hostName}</span>
             </div>
           </div>
-          <div className="flex items-center gap-2 ml-4">
-            {participantsImageUrl
-              .slice(0, 5)
-              .map((participantImageUrl, index) => (
+          <div>
+            <h3 className="font-semibold mb-2">Participants</h3>
+            <div className="flex flex-wrap gap-2">
+              {participantsImageUrl.map((url, index) => (
                 <Image
                   key={index}
-                  title="Test"
-                  alt={`User ${index}`}
-                  className={`rounded-full ring-2 ring-white`}
-                  height={"40"}
-                  src={participantImageUrl} // Use the participantImageUrl here
-                  style={{
-                    aspectRatio: "40/40",
-                    objectFit: "cover",
-                    marginLeft: `-${7 * 2}px`,
-                  }}
-                  width={"40"}
+                  src={url}
+                  alt={`Participant ${index + 1}`}
+                  width={32}
+                  height={32}
+                  className="rounded-full"
                 />
               ))}
-            {/* total numbers of users join */}
-            {/* <span className="text-2xl">+32</span> */}
-          </div>
-        </CardContent>
-        <CardFooter className="p-4 flex justify-between items-center">
-          <div className="grid grid-cols-2 gap-1">
-            <div className="text-sm ">
-              <p>
-                <span className="font-medium">Location</span>:{" "}
-                <span>{eventLocation}</span>
-              </p>
-              <p>
-                <span className="font-medium">Event Date</span>:{" "}
-                <span>{eventDate} </span>
-              </p>
-              <p>
-                <span className="font-medium">Starts</span>:{" "}
-                <time>{eventStart}</time>
-              </p>
-              {/* <p>
-                <span className="font-medium">Ends</span>:{" "}
-                <time>{eventEnd}</time>
-              </p> */}
-            </div>
-            <div className="flex items-end gap-1 pl-9">
-              <UserPlusIcon className="w-5 h-5 mb-2" />
-              <span className="text-2xl font-semibold">{capacity}</span>
-            </div>
-            <div className="col-span-2">
-              <Button className="w-full" onClick={() => joinEvent(eventId)}>
-                Join Event
-              </Button>
             </div>
           </div>
-        </CardFooter>
-      </Card>
-    </div>
+        </div>
+        <Button onClick={() => joinEvent(eventId)}>Join Event</Button>
+      </DialogContent>
+    </Dialog>
   );
 }
 
-function UserPlusIcon(props: any) {
+function CalendarIcon(props: any) {
   return (
     <svg
       {...props}
@@ -208,10 +222,56 @@ function UserPlusIcon(props: any) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <line x1="19" y1="8" x2="19" y2="14" />
-      <line x1="22" y1="11" x2="16" y2="11" />
+      <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+      <line x1="16" x2="16" y1="2" y2="6" />
+      <line x1="8" x2="8" y1="2" y2="6" />
+      <line x1="3" x2="21" y1="10" y2="10" />
+    </svg>
+  );
+}
+
+function MapPinIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+      <circle cx="12" cy="10" r="3" />
+    </svg>
+  );
+}
+
+function UserGroupIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 7V5c0-1.1.9-2 2-2h2" />
+      <path d="M17 3h2c1.1 0 2 .9 2 2v2" />
+      <path d="M21 17v2c0 1.1-.9 2-2 2h-2" />
+      <path d="M7 21H5c-1.1 0-2-.9-2-2v-2" />
+      <path d="M8 7v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V7" />
+      <path d="M7 7h10" />
+      <path d="M7 13h10" />
+      <path d="M17 7a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V7z" />
     </svg>
   );
 }

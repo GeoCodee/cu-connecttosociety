@@ -23,11 +23,25 @@ export default function Profile() {
 
   const getUserInfo = async () => {
     const userInfo = await checkUserInfo();
-    // Destructure to get properties directly
 
-    setProfile(userInfo);
+    // Check if userInfo is incomplete or missing
+    if (!userInfo || !isProfileComplete(userInfo)) {
+      setIsEditing(true);
+    } else {
+      setProfile(userInfo);
+    }
     setIsLoading(false);
     console.log(userInfo);
+  };
+
+  // Helper function to check if profile is complete
+  const isProfileComplete = (profile: ProfileModel): boolean => {
+    return !!(
+      profile.name &&
+      profile.description &&
+      profile.interest_tags &&
+      profile.interest_tags.length > 0
+    );
   };
 
   const editMode = () => {
@@ -48,7 +62,7 @@ export default function Profile() {
   }
 
   if (isEditing) {
-    return <CreateOrEditProfile />;
+    return <CreateOrEditProfile setIsEditing={setIsEditing} />;
   }
 
   return (

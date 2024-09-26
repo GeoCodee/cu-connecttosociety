@@ -10,14 +10,20 @@ import axios from "axios";
 interface ProfileData {
   name: string;
   description: string;
-  tags: string[];
+  interestTags: string[]; // Changed from tags to interestTags
 }
 
-const CreateOrEditProfile: React.FC = () => {
+interface CreateOrEditProfileProps {
+  setIsEditing: (isEditing: boolean) => void;
+}
+
+const CreateOrEditProfile: React.FC<CreateOrEditProfileProps> = ({
+  setIsEditing,
+}) => {
   const [profile, setProfile] = useState<ProfileData>({
     name: "",
     description: "",
-    tags: [],
+    interestTags: [], // Changed from tags to interestTags
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,10 +36,10 @@ const CreateOrEditProfile: React.FC = () => {
 
   const handleTagToggle = (tag: string) => {
     setProfile((prevProfile) => {
-      const newTags = prevProfile.tags.includes(tag)
-        ? prevProfile.tags.filter((t) => t !== tag)
-        : [...prevProfile.tags, tag];
-      return { ...prevProfile, tags: newTags };
+      const newTags = prevProfile.interestTags.includes(tag)
+        ? prevProfile.interestTags.filter((t) => t !== tag)
+        : [...prevProfile.interestTags, tag];
+      return { ...prevProfile, interestTags: newTags };
     });
   };
 
@@ -55,7 +61,7 @@ const CreateOrEditProfile: React.FC = () => {
       const aiSelectedTags = response.data;
       setProfile((prevProfile) => ({
         ...prevProfile,
-        tags: aiSelectedTags.filter((tag: string) =>
+        interestTags: aiSelectedTags.filter((tag: string) =>
           eventTags.some((eventTag) => eventTag.label === tag)
         ),
       }));
@@ -67,10 +73,31 @@ const CreateOrEditProfile: React.FC = () => {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // TODO: Implement profile submission logic
-    console.log("Profile submitted:", profile);
+    try {
+      console.log("Submitting profile:", profile); // Log the profile before sending
+      const response = await fetch(
+        "/api/functions/profileFunctions/editProfileDetails",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(profile),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
+      }
+
+      console.log("Profile updated successfully");
+      setIsEditing(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
   };
 
   return (
@@ -125,10 +152,12 @@ const CreateOrEditProfile: React.FC = () => {
                 <Badge
                   key={tag.label}
                   variant={
-                    profile.tags.includes(tag.label) ? "default" : "outline"
+                    profile.interestTags.includes(tag.label)
+                      ? "default"
+                      : "outline"
                   }
                   className={`cursor-pointer ${
-                    profile.tags.includes(tag.label) ? tag.color : ""
+                    profile.interestTags.includes(tag.label) ? tag.color : ""
                   }`}
                   onClick={() => handleTagToggle(tag.label)}
                 >
