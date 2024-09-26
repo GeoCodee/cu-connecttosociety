@@ -37,7 +37,7 @@ export interface ProfileModel {
   interest_tags: string[];
 }
 
-const eventTags = [
+export const eventTags = [
   {
     label: "Sports",
     color: "text-blue-400",

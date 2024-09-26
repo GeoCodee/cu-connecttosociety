@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { useState, useEffect } from "react";
 import { ProfileModel, checkUserInfo, fetchUserInfo } from "./profileModel";
@@ -10,6 +10,9 @@ import CreateProfile from "@/components/component/createProfile-card";
 import { SkeletonLoading } from "@/components/SkeletonLoading";
 import { Button } from "@/components/ui/button";
 import ProfileWithAvatar from "@/components/component/profile/profileWithAvatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FaEdit } from "react-icons/fa";
+import CreateOrEditProfile from "@/components/component/profile/createOrEditProfile";
 
 export default function Profile() {
   const [userName, setUserName] = useState<string | null>(null); // State to hold user's full name
@@ -45,31 +48,42 @@ export default function Profile() {
   }
 
   if (isEditing) {
-    return <ProfileWithAvatar></ProfileWithAvatar>;
+    return <CreateOrEditProfile />;
   }
 
   return (
-    <div className="flex justify-center">
-      <Card className="w-3/4 max-w-4xl mx-auto lg:w-1/2">
-        <CardHeader className="p-8">
-          <div className="flex">
-            <div className="ml-auto">
-              <Button className="text-right" onClick={editMode}>
-                Edit
-              </Button>
-            </div>
+    <div className="flex justify-center p-4">
+      <Card className="w-full max-w-3xl shadow-lg">
+        <CardHeader className="p-8 pb-0">
+          <div className="flex justify-between items-center mb-6">
+            <Avatar className="w-24 h-24">
+              <AvatarImage src={profile?.avatar_url} alt={profile?.name} />
+              <AvatarFallback>{profile?.name?.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <Button
+              onClick={editMode}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <FaEdit /> Edit Profile
+            </Button>
           </div>
-          <div className="flex flex-col text-center">
-            <h2 className="text-4xl font-bold mb-4">{profile?.name}</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold">{profile?.name}</h2>
+            <p className="text-lg text-muted-foreground">
               {profile?.description}
             </p>
           </div>
         </CardHeader>
-        <CardContent className="p-8 pt-0">
-          <div className="flex flex-wrap justify-center gap-3">
+        <CardContent className="p-8">
+          <h3 className="text-xl font-semibold mb-4">Interests</h3>
+          <div className="flex flex-wrap gap-2">
             {profile?.interest_tags.map((tag, index) => (
-              <Badge key={index} className="text-base px-3 py-1">
+              <Badge
+                key={index}
+                variant="secondary"
+                className="text-sm px-3 py-1"
+              >
                 {tag}
               </Badge>
             ))}
