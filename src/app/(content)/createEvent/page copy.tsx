@@ -197,7 +197,7 @@ export default function EventForm() {
                   // Send selectedTags state to the backend
                 }}
                 className={`${
-                  selectedTags.includes(tag) ? "bg-green-400 text-black" : "bg-[#111827]"
+                  selectedTags.includes(tag) ? "bg-green-500" : "bg-yellow-500"
                 } my-2 whitespace-nowrap text-slate-100 p-2 rounded-md hover:cursor-pointer`}
               >
                 {tag}

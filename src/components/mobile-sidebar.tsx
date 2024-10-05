@@ -20,11 +20,9 @@ const MobileSidebar = () => {
   return (
     <Sheet>
       <SheetTrigger>
-        <div>
           <Button variant="ghost" size="icon" className="lg:hidden">
-            <Menu></Menu>
+            <Menu/>
           </Button>
-        </div>
       </SheetTrigger>
       <SheetContent side="left" className="p-0">
         <Sidebar></Sidebar>

@@ -16,13 +16,12 @@ import { useUrlPosition } from "./hooks/useUrlPosition";
 import { useRouter } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
 
 // Dummy event data (you can replace this with dynamic data from an API or database)
 const events = [
   { name: "Community Cleanup", lat: 37.7749, lng: -122.4194 },
   { name: "Charity Run", lat: 34.0522, lng: -118.2437 },
-  { name: "Local Food Drive", lat: 40.7128, lng: -74.0060 },
+  { name: "Local Food Drive", lat: 40.7128, lng: -74.006 },
 ];
 
 export default function Map() {
@@ -64,10 +63,16 @@ export default function Map() {
         {/* Markers for each event */}
         {events.map((event, index) => (
           <Marker key={index} position={[event.lat, event.lng]}>
-            <Popup>{event.name}</Popup>
+            <Popup>
+              <span>{event.name}</span>
+            </Popup>
           </Marker>
         ))}
-
+        <Marker position={[lat, lng]}>
+          <Popup>
+            <span>{"Location"}</span>
+          </Popup>
+        </Marker>
         <ChangeCenter position={mapPosition} />
         <DetectClick />
       </MapContainer>

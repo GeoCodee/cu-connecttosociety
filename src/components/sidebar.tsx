@@ -45,9 +45,9 @@ const routes = [
 const Sidebar = () => {
   const pathName = usePathname();
   return (
-    <div className="space-y-4 py-4 flex flec-col h-full bg-[#111827] text-white">
-      <div className="px-3 py-2 flex-1">
-        <Link href="/" className="flex items-center justify-start pl-2">
+    <div className="space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white lg:w-full lg:space-y-0 lg:py-0">
+      <div className="px-3 py-2 flex-1 lg:flex lg:flex-row lg:justify-between lg:items-center">
+        <Link href="/" className="flex items-center justify-start pl-2  ">
           <div className="relative w-8 h-8 mr-4">
             <PersonStanding
               className="text-green-400"
@@ -63,14 +63,14 @@ const Sidebar = () => {
             CU
           </h1>
         </Link>
-        <div className="border-b-4 border-green-400 w-full mb-8 mt-5"></div>
-        <div className="space-y-1">
+        <div className="border-b-4 border-green-400 w-full mb-8 mt-5 lg:hidden"></div>
+        <div className="space-y-1 lg:flex lg:items-center lg:space-y-0">
           {routes.map((route) => (
             <Link
               href={route.href}
               key={route.href}
               className={cn(
-                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition",
+                "text-sm group whitespace-nowrap flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition pr-6 ",
                 pathName === route.href
                   ? "text-white bg-white/10"
                   : "text-zinc-400"
