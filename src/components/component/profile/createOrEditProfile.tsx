@@ -52,7 +52,7 @@ const CreateOrEditProfile: React.FC<CreateOrEditProfileProps> = ({
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "/api/functions/profileFunctions/generateTagsByDescription",
+        "/api/functions/generateTagsByDescription",
         {
           description: profile.description,
         }
