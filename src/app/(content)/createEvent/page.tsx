@@ -7,6 +7,12 @@ import { useRouter } from "next/router";
 import { toast, Bounce, ToastContainer } from "react-toastify";
 import "leaflet/dist/leaflet.css";
 import "react-toastify/dist/ReactToastify.css";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import axios from "axios";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
@@ -41,17 +47,15 @@ const TAGS: string[] = [
 ];
 
 export default function EventForm() {
-  // const router = useRouter();
-
   const eventName = useRef<HTMLInputElement>(null);
   const description = useRef<HTMLTextAreaElement>(null);
   const date = useRef<HTMLInputElement>(null);
   const time = useRef<HTMLInputElement>(null);
   const capacity = useRef<HTMLInputElement>(null);
-  const eventType = useRef<HTMLInputElement>(null);
   const [lat, lng] = useUrlPosition();
   const [cityName, setCityName] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(
     function () {
@@ -71,6 +75,36 @@ export default function EventForm() {
     [lat, lng]
   );
 
+  const handleAutoSelectTags = async () => {
+    if (!description.current?.value) {
+      toast.error(
+        "Please enter a description before auto-selecting tags.",
+        toastProperties
+      );
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await axios.post("/api/generateTagsByDescription", {
+        description: description.current.value,
+      });
+
+      const aiSelectedTags = response.data;
+      setSelectedTags(
+        aiSelectedTags.filter((tag: string) => TAGS.includes(tag))
+      );
+    } catch (error) {
+      console.error("Error auto-selecting tags:", error);
+      toast.error(
+        "An error occurred while auto-selecting tags. Please try again.",
+        toastProperties
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const newEvent = {
@@ -79,14 +113,15 @@ export default function EventForm() {
       date: date.current?.value,
       time: time.current?.value,
       capacity: capacity.current?.value,
-      eventType: selectedTags,
+      eventType: selectedTags, // Include the selected tags here
       eventlocation: cityName,
       lat,
       lng,
     };
-    // console.log(JSON.stringify(newEvent));
+
     try {
-      await fetch("/api/add-event", {
+      console.log("Submitting event:", newEvent);
+      const response = await fetch("/api/add-event", {
         method: "POST",
         body: JSON.stringify(newEvent),
         headers: {
@@ -94,124 +129,118 @@ export default function EventForm() {
         },
       });
 
-      await toast.success("Event Created Successfully", toastProperties);
-
-      //need to find alternatives for window.location.href
-      if (typeof window !== undefined) {
-        window.location.href = "/events";
+      if (!response.ok) {
+        throw new Error("Failed to create event");
       }
 
-      // redirect("/events");
-      // router.push("/events");
+      await toast.success("Event Created Successfully", toastProperties);
+
+      // Use the router for navigation instead of window.location
+      router.push("/events");
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error creating event:", error);
+      toast.error("Failed to create event. Please try again.", toastProperties);
     }
   }
 
   return (
-    <div>
-      <div>
-        <ToastContainer></ToastContainer>
-      </div>
-      <form onSubmit={onSubmit} className="max-w-lg mx-auto mt-4">
-        <div className="mb-4">
-          <label htmlFor="event-name" className="block">
-            Event Name
-          </label>
-          <input
-            ref={eventName}
-            type="text"
-            id="event-name"
-            className="mt-1 p-2 border rounded w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="description" className="block">
-            Event Description
-          </label>
-          <textarea
-            ref={description}
-            id="description"
-            className="mt-1 p-2 border rounded w-full"
-            required
-          ></textarea>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="event-location" className="block">
-            Where is the Event?
-          </label>
-          <Map />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="event-date" className="block">
-            When is the Event?
-          </label>
-          <input
-            ref={date}
-            type="date"
-            id="event-date"
-            className="mt-1 p-2 border rounded w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="event-time" className="block">
-            What time is the Event?
-          </label>
-          <input
-            ref={time}
-            type="time"
-            id="event-time"
-            className="mt-1 p-2 border rounded w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="capacity" className="block">
-            How many people can join the event?
-          </label>
-          <input
-            ref={capacity}
-            type="number"
-            id="capacity"
-            className="mt-1 p-2 border rounded w-full"
-            min={1}
-            required
-          />
-        </div>
-        <div className="flex flex-col justify-start items-center mb-4">
-          <p>Choose the category that fits this event</p>
-          <div className="space-x-2 flex flex-wrap">
-            {TAGS.map((tag: string) => (
-              <span
-                key={tag}
-                onClick={() => {
-                  if (selectedTags.includes(tag)) {
-                    setSelectedTags(
-                      selectedTags.filter((selectedTag) => selectedTag !== tag)
-                    ); // Deselect
-                  } else {
-                    setSelectedTags([...selectedTags, tag]); // Select
-                  }
-                  // Send selectedTags state to the backend
-                }}
-                className={`${
-                  selectedTags.includes(tag) ? "bg-green-400 text-black" : "bg-[#111827]"
-                } my-2 whitespace-nowrap text-slate-100 p-2 rounded-md hover:cursor-pointer`}
-              >
-                {tag}
-              </span>
-            ))}
+    <Card className="w-full max-w-2xl mx-auto mt-8">
+      <CardHeader>
+        <CardTitle>Create New Event</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={onSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="event-name" className="text-sm font-medium">
+              Event Name
+            </label>
+            <Input ref={eventName} id="event-name" type="text" required />
           </div>
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded self-center"
-        >
-          Add Event
-        </button>
-      </form>
-    </div>
+
+          <div className="space-y-2">
+            <label htmlFor="description" className="text-sm font-medium">
+              Event Description
+            </label>
+            <Textarea ref={description} id="description" rows={4} required />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="event-location" className="text-sm font-medium">
+              Where is the Event?
+            </label>
+            <Map />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label htmlFor="event-date" className="text-sm font-medium">
+                When is the Event?
+              </label>
+              <Input ref={date} id="event-date" type="date" required />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="event-time" className="text-sm font-medium">
+                What time is the Event?
+              </label>
+              <Input ref={time} id="event-time" type="time" required />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="capacity" className="text-sm font-medium">
+              How many people can join the event?
+            </label>
+            <Input
+              ref={capacity}
+              id="capacity"
+              type="number"
+              min={1}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex justify-between items-center mb-2">
+              <label className="text-sm font-medium">Event Categories</label>
+              <Button
+                type="button"
+                onClick={handleAutoSelectTags}
+                disabled={isLoading}
+                variant="outline"
+                size="sm"
+              >
+                {isLoading ? "Processing..." : "Auto Select Tags With AI"}
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {TAGS.map((tag) => (
+                <Badge
+                  key={tag}
+                  variant={selectedTags.includes(tag) ? "default" : "outline"}
+                  className={`cursor-pointer ${
+                    selectedTags.includes(tag) ? "bg-green-400 text-black" : ""
+                  }`}
+                  onClick={() => {
+                    if (selectedTags.includes(tag)) {
+                      setSelectedTags(selectedTags.filter((t) => t !== tag));
+                    } else {
+                      setSelectedTags([...selectedTags, tag]);
+                    }
+                  }}
+                >
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          <Button type="submit" className="w-full">
+            Add Event
+          </Button>
+        </form>
+      </CardContent>
+      <ToastContainer />
+    </Card>
   );
 }

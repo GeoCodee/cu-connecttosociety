@@ -51,12 +51,9 @@ const CreateOrEditProfile: React.FC<CreateOrEditProfileProps> = ({
 
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        "/api/functions/generateTagsByDescription",
-        {
-          description: profile.description,
-        }
-      );
+      const response = await axios.post("/api/generateTagsByDescription", {
+        description: profile.description,
+      });
 
       const aiSelectedTags = response.data;
       setProfile((prevProfile) => ({
