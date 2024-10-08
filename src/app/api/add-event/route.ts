@@ -13,12 +13,13 @@ export async function POST(req: Request) {
   const eventTime = body.time;
   const capacity = body.capacity;
   const eventDate = body.date;
+  const eventTags = body.eventTags;
 
   //   const eventType = body.eventType;
   //   const email;
 
   try {
-    await sql`INSERT INTO Event(userid,description,eventname,eventlocation,eventtime,eventDate,capacity) VALUES(${userId},${description},${eventName},${eventLocation},${eventTime},${eventDate},${capacity})`;
+    await sql`INSERT INTO Event(userid,description,eventname,eventlocation,eventtime,eventDate,capacity, event_tags) VALUES(${userId},${description},${eventName},${eventLocation},${eventTime},${eventDate},${capacity},${eventTags})`;
   } catch (error: any) {
     console.log(error.message);
     return NextResponse.json({ error }, { status: 500 });

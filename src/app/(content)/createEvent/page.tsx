@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { toast, Bounce, ToastContainer } from "react-toastify";
 import "leaflet/dist/leaflet.css";
 import "react-toastify/dist/ReactToastify.css";
+import { TAGS } from "@/utils/utils";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
@@ -22,23 +23,7 @@ const toastProperties: any = {
   transition: Bounce,
 };
 
-const TAGS: string[] = [
-  "Sports",
-  "Video Games",
-  "DIY",
-  "Music",
-  "Movies",
-  "Technology",
-  "Travel",
-  "Cooking",
-  "Fitness",
-  "Art",
-  "Photography",
-  "Books",
-  "Fashion",
-  "Health",
-  "Education",
-];
+
 
 export default function EventForm() {
   // const router = useRouter();
@@ -48,7 +33,6 @@ export default function EventForm() {
   const date = useRef<HTMLInputElement>(null);
   const time = useRef<HTMLInputElement>(null);
   const capacity = useRef<HTMLInputElement>(null);
-  const eventType = useRef<HTMLInputElement>(null);
   const [lat, lng] = useUrlPosition();
   const [cityName, setCityName] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -79,12 +63,12 @@ export default function EventForm() {
       date: date.current?.value,
       time: time.current?.value,
       capacity: capacity.current?.value,
-      eventType: selectedTags,
+      eventTags: selectedTags,
       eventlocation: cityName,
       lat,
       lng,
     };
-    // console.log(JSON.stringify(newEvent));
+    console.log(JSON.stringify(newEvent));
     try {
       await fetch("/api/add-event", {
         method: "POST",
@@ -111,7 +95,7 @@ export default function EventForm() {
   return (
     <div>
       <div>
-        <ToastContainer></ToastContainer>
+        <ToastContainer/>
       </div>
       <form onSubmit={onSubmit} className="max-w-lg mx-auto mt-4">
         <div className="mb-4">

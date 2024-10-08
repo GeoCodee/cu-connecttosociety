@@ -2,9 +2,14 @@
 
 import EventCard from "@/components/component/event-card";
 import { eventDetails } from "@/components/component/event-card";
+import { TAGS } from "@/utils/utils";
+import { log } from "console";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Search from "./Search";
 
 export default function Profile() {
   const [events, setEvents] = useState([]);
@@ -55,6 +60,14 @@ export default function Profile() {
     }
   }
 
+   function searchEvents(tag:string) {
+    // setEvents(s => s["event_tags"].filter(t => t.includes(tag)));
+    // setEvents(s => {
+    //   console.log(s[1]["event_tags"])
+    //   return [...s];
+    // });
+  }
+
   async function joinHandler(eventId: any) {
     // Do a get query to check if an event exists where userId and eventId match the table in the db.
     try {
@@ -77,12 +90,29 @@ export default function Profile() {
     }
   }
 
+  function addFilter(tag: string) {}
+
+  const searchParams = useSearchParams();
+  function search(e) {
+    e.preventDefault();
+    const tag = e.target[0].value;
+
+    // Create a new URLSearchParams object based on the current search params
+    const params = new URLSearchParams(searchParams.toString());
+
+    // Append or update the tag parameter
+    params.set("tag", tag);
+
+    console.log(params);
+  }
+
   return (
     <div>
       <div>
-        <ToastContainer></ToastContainer>
+        <ToastContainer />
       </div>
-      <div className="flex flex-wrap gap-4">
+      <Search searchEvents={searchEvents}  />
+      <div className="flex flex-col space-y-4 pl-36">
         {events.map((event: any) => (
           <EventCard
             key={event.eventid}
@@ -99,6 +129,14 @@ export default function Profile() {
           ></EventCard>
         ))}
         {/* <EventCard></EventCard> */}
+      </div>
+
+      <div className="flex space-x-4">
+        {TAGS.map((tag) => (
+          <span onClick={() => addFilter(tag)} className="bg-red-400" key={tag}>
+            {tag}
+          </span>
+        ))}
       </div>
     </div>
   );
