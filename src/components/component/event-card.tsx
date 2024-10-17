@@ -47,10 +47,7 @@ export default function EventCard({
   eventStart,
   capacity,
   joinEvent,
-<<<<<<< HEAD
   imageUrl,
-=======
->>>>>>> 12550ce2b30c2da9931bc53a9b52e37067641583
 }: any) {
   const [hostImageUrl, setHostImageUrl] = useState(null);
   const [participantsImageUrl, setParticipantsImageUrl] = useState<string[]>(
@@ -113,7 +110,6 @@ export default function EventCard({
     fetchHostIcon();
     fetchParticipants();
   }, [eventId]);
-<<<<<<< HEAD
   ///Users/alejandro/Downloads/cu-connecttosociety-3559c0aedf6dbf2fb703d48591c3d285e333e99a/public/userImages
   return (
     <Dialog>
@@ -128,30 +124,15 @@ export default function EventCard({
               alt="event image"
             />
             <CardTitle className="text-base font-bold text-nowrap">
-=======
-
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Card className="w-full max-w-[280px] h-[180px] rounded-lg border flex flex-col overflow-hidden cursor-pointer">
-          <CardHeader className="p-2 space-y-0.5 flex-shrink-0">
-            <CardTitle className="text-base font-bold truncate">
->>>>>>> 12550ce2b30c2da9931bc53a9b52e37067641583
               {eventName}
             </CardTitle>
             <CardDescription className="text-xs line-clamp-1">
               {eventDescription}
             </CardDescription>
           </CardHeader>
-<<<<<<< HEAD
           <CardContent className="p-2 flex-grow text-sm space-y-1">
             <div className="flex items-center gap-1">
               <CalendarIcon className="w-6 h-6" />
-=======
-          <CardContent className="p-2 flex-grow text-xs space-y-1">
-            <div className="flex items-center gap-1">
-              <CalendarIcon className="w-3 h-3" />
->>>>>>> 12550ce2b30c2da9931bc53a9b52e37067641583
               <span>
                 {eventDate} at {eventStart}
               </span>
