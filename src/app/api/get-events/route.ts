@@ -13,7 +13,6 @@ export async function GET(request: Request) {
     //only select events that have capaciy > 0
     //only select events that doesn't have userId and eventId in event_particiption
     const result = await sql`
-<<<<<<< HEAD
     SELECT e.*, i.imageUrl
     FROM EVENT e
     LEFT JOIN EVENT_PARTICIPATION ep 
@@ -24,16 +23,6 @@ export async function GET(request: Request) {
     WHERE e.capacity > 0 
         AND ep.participationid IS NULL;
     `;
-=======
-        SELECT e.*
-        FROM EVENT e
-        LEFT JOIN EVENT_PARTICIPATION ep 
-            ON e.eventId = ep.eventid 
-            AND ep.userid = ${userId}
-        WHERE e.capacity > 0 
-            AND ep.participationid IS NULL;
-      `;
->>>>>>> 12550ce2b30c2da9931bc53a9b52e37067641583
 
     return NextResponse.json({ result }, { status: 200 });
   } catch (error) {
