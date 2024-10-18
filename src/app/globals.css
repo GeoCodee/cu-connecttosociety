@@ -127,4 +127,42 @@
       @apply bg-background text-foreground;
     }
   }
+
+  @keyframes moveTogether {
+    0%, 100% {
+      transform: translateX(0); /* Original position */
+    }
+    50% {
+      transform: translateX(-20px); /* Move the C 20px to the left */
+    }
+  }
+  
+  @keyframes moveTogetherReverse {
+    0%, 100% {
+      transform: translateX(0); /* Original position */
+    }
+    50% {
+      transform: translateX(20px); /* Move the U 20px to the right */
+    }
+  }
+  
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: rgb(134 239 172)
+  }
+  
+  .loading-letter {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 0 10px;
+    animation: moveTogether 1s ease-in-out infinite;
+  }
+  
+  .loading-letter.u {
+    animation: moveTogetherReverse 1s ease-in-out infinite;
+  }
+  
 }

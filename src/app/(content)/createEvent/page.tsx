@@ -2,8 +2,6 @@ import { ToastContainer } from "react-toastify";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CreateEventsForm from "@/components/CreateEventsForm";
 
-const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
-
 export default function CreateEventPage() {
   // const router = useRouter();
   return (

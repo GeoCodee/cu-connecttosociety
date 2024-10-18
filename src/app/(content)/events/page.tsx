@@ -1,10 +1,11 @@
 "use client";
 
 import EventCard from "@/components/component/event-card";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Search from "./Search";
+import Loading from "@/app/loading";
 
 const toastProperties: any = {
   position: "top-right",
@@ -20,43 +21,62 @@ const toastProperties: any = {
 
 export default function EventsPage() {
   const [events, setEvents] = useState<CreatedEvent[]>([]);
+  const [loading, setLoading] = useState(true);
 
-
-  useEffect(function () {
+  useEffect(() => {
     getEvents();
   }, []);
 
   async function getEvents() {
-    console.log("reset");
+    setLoading(true);
     try {
       await fetch(`/api/get-events`)
         .then((response) => response.json())
         .then((data) => {
-          // console.log(data);
           const { result } = data;
-          console.log(data.result.rows);
           setEvents(result?.rows);
+          setLoading(false); // Hide loading state
         });
     } catch (error) {
       console.error("Error:", error);
+      setLoading(false); // Hide loading state even on error
     }
   }
 
-  function searchEvents(tags: string[], tag: string) {
-    if (tag === undefined) {
-      setEvents((prev) => {
-        const filteredEvents = prev.filter((current) => {
-          return tags.some((tag) => current.eventTags.includes(tag));
-        });
-        return filteredEvents;
-      });
-    } else {
-      setEvents(prev => prev.filter(current => current.eventTags.includes(tag)));
+  async function searchEvents(tagStatement: string[], tag: string) {
+    if(tagStatement.length === 0) {
+      getEvents();
+    }
+    try {
+      const response = await fetch(`/api/get-events-by-tags?filter=${tagStatement}`);
+      const data = await response.json();
+      const { result } = data;
+      console.log(result)
+      setEvents(result);
+      // setLoading(false);
+    } catch (error) {
+      console.log("Error", error);
+      // setLoading(false);
     }
   }
+  
+
+  // function searchEvents(tags: string[], tag: string) {
+  //   if (tag === undefined) {
+  //     setEvents((prev) => {
+  //       const filteredEvents = prev.filter((current) => {
+  //         return tags.some((tag) => current?.eventTags.includes(tag));
+  //       });
+  //       return filteredEvents;
+  //     });
+  //   } else {
+  //     setEvents((prev) =>
+  //       prev.filter((current) => current.eventTags.includes(tag))
+  //     );
+  //   }
+  // }
 
   async function joinHandler(eventId: any) {
-    // Do a get query to check if an event exists where userId and eventId match the table in the db.
     try {
       await fetch(`/api/join-event`, {
         method: "POST",
@@ -75,10 +95,15 @@ export default function EventsPage() {
     }
   }
 
+  if (loading) {
+    // Render the loading component when the loading state is true
+    return <Loading />;
+  }
+
   return (
     <div className="flex flex-col space-y-8 items-center  ">
       <Search searchEvents={searchEvents} reset={getEvents} />
-        <ToastContainer></ToastContainer>
+      <ToastContainer></ToastContainer>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mx-4">
         {events.map((event: any) => (
           <EventCard
@@ -91,12 +116,10 @@ export default function EventsPage() {
             eventLocation={event.eventlocation}
             eventDate={event.eventdate}
             eventStart={event.eventtime}
-            // eventEnd={event.eventEnd}
             capacity={event.capacity}
             joinEvent={() => joinHandler(event.eventid)}
-          ></EventCard>
+          />
         ))}
-        {/* <EventCard></EventCard> */}
       </div>
     </div>
   );

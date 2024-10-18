@@ -138,11 +138,11 @@ export default function EventCard({
               </span>
             </div>
             <div className="flex items-center gap-1">
-              <MapPinIcon className="w-3 h-3" />
+              <MapPinIcon className="w-6 h-6" />
               <span className="truncate">{eventLocation}</span>
             </div>
             <div className="flex items-center gap-1">
-              <UserGroupIcon className="w-3 h-3" />
+              <UserGroupIcon className="w-6 h-6" />
               <span>{capacity} spots</span>
             </div>
           </CardContent>

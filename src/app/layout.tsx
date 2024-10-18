@@ -22,7 +22,6 @@ export default function RootLayout({
           <NavBar />
           <main className="lg:max-w-[1440px] mx-auto">{children}</main>
         </body>
-        {/* Use Next.js Script component for the external script */}
       </ClerkProvider>
     </html>
   );

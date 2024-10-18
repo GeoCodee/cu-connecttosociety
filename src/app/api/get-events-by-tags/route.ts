@@ -1,24 +1,42 @@
-import { auth } from "@clerk/nextjs";
-import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
+import { sql } from "@vercel/postgres";
+import { Pool } from "pg";
+
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL,
+  // Optionally set other pool options
+  // max: 20, // maximum number of clients in the pool
+  // idleTimeoutMillis: 30000, // close clients after 30 seconds of inactivity
+  // connectionTimeoutMillis: 2000, // return an error after 2 seconds if connection could not be established
+});
 
 export async function GET(request: Request) {
   try {
-    // Get the query parameters from the URL
-    const { searchParams } = new URL(request.url);
-    const tag = searchParams.get("tag");
-    console.log(tag);
-    // if (!tag) {
-    //   return NextResponse.json({ error: "Tag is required" }, { status: 400 });
-    // }
+    const searchParams = new URL(request.url).searchParams;
+    const filter = searchParams.get("filter");
 
-    const result = await sql`
-    SELECT * FROM EVENT WHERE ${tag} = ANY(event_tags)
-  `;
-  
+    if (!filter) {
+      return NextResponse.json(
+        { error: "No filter provided" },
+        { status: 400 }
+      );
+    }
 
-    return NextResponse.json({ result }, { status: 200 });
+    const pgArray = `{${filter.split(",").join(",")}}`;
+
+    console.log(`
+      SELECT * FROM EVENT WHERE eventTags && ARRAY[${pgArray}];
+    `);
+
+    const result = await pool.query(
+      `SELECT * FROM EVENT WHERE eventTags && $1::text[]`,
+      [pgArray]
+    );
+
+
+    return NextResponse.json({ result: result.rows }, { status: 200 });
   } catch (error: any) {
+    console.error(error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
