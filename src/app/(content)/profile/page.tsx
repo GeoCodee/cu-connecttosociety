@@ -1,102 +1,115 @@
-"use client";
+'use client'
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-import { useState, useEffect } from "react";
-import { ProfileModel, checkUserInfo, fetchUserInfo } from "./profileModel";
-import { useAuth } from "@clerk/nextjs"; // Use useAuth instead of auth
-import { Badge } from "@/components/ui/badge";
-import CreateProfile from "@/components/component/createProfile-card";
-import { SkeletonLoading } from "@/components/SkeletonLoading";
-import { Button } from "@/components/ui/button";
-import ProfileWithAvatar from "@/components/component/profile/profileWithAvatar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { FaEdit } from "react-icons/fa";
-import CreateOrEditProfile from "@/components/component/profile/createOrEditProfile";
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { useState, useEffect } from "react"
+import { ProfileModel, checkUserInfo } from "./profileModel"
+import { Badge } from "@/components/ui/badge"
+import CreateOrEditProfile from "@/components/component/profile/createOrEditProfile"
+import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Skeleton } from "@/components/ui/skeleton"
+import { FaEdit, FaMapMarkerAlt, FaBriefcase, FaGraduationCap } from "react-icons/fa"
 
 export default function Profile() {
-  const [userName, setUserName] = useState<string | null>(null); // State to hold user's full name
-  const [isLoading, setIsLoading] = useState(true); // Loading state
-  const [isEditing, setIsEditing] = useState(false);
-
-  const [profile, setProfile] = useState<ProfileModel>();
+  const [isLoading, setIsLoading] = useState(true)
+  const [isEditing, setIsEditing] = useState(false)
+  const [profile, setProfile] = useState<ProfileModel | null>(null)
 
   const getUserInfo = async () => {
-    const userInfo = await checkUserInfo();
-
-    // Check if userInfo is incomplete or missing
+    const userInfo = await checkUserInfo()
     if (!userInfo || !isProfileComplete(userInfo)) {
-      setIsEditing(true);
+      setIsEditing(true)
     } else {
-      setProfile(userInfo);
+      setProfile(userInfo)
     }
-    setIsLoading(false);
-    console.log(userInfo);
-  };
+    setIsLoading(false)
+  }
 
-  // Helper function to check if profile is complete
   const isProfileComplete = (profile: ProfileModel): boolean => {
     return !!(
       profile.name &&
       profile.description &&
       profile.interest_tags &&
       profile.interest_tags.length > 0
-    );
-  };
+    )
+  }
 
   const editMode = () => {
-    setIsEditing(true);
-  };
+    setIsEditing(true)
+  }
 
   useEffect(() => {
-    getUserInfo();
-  }, []); // Dependency array includes userId
-
-  // if (isLoading) {
-  //   return <CreateProfile></CreateProfile>;
-  //   // Show a loading message while fetching data
-  // }
+    getUserInfo()
+  }, [])
 
   if (isLoading) {
-    return <SkeletonLoading></SkeletonLoading>;
+    return (
+      <div className="flex justify-center p-4 bg-gray-50">
+        <Card className="w-full max-w-4xl shadow-lg">
+          <CardHeader className="p-8 pb-0">
+            <div className="flex justify-between items-center mb-6">
+              <Skeleton className="w-32 h-32 rounded-full" />
+              <Skeleton className="h-10 w-32" />
+            </div>
+            <Skeleton className="h-8 w-3/4 mb-4" />
+            <Skeleton className="h-4 w-full mb-2" />
+            <Skeleton className="h-4 w-5/6" />
+          </CardHeader>
+          <CardContent className="p-8">
+            <Skeleton className="h-6 w-1/4 mb-4" />
+            <div className="flex flex-wrap gap-2">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <Skeleton key={i} className="h-8 w-24" />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   if (isEditing) {
-    return <CreateOrEditProfile setIsEditing={setIsEditing} />;
+    return <CreateOrEditProfile setIsEditing={setIsEditing} />
   }
 
   return (
-    <div className="flex justify-center p-4">
-      <Card className="w-full max-w-3xl shadow-lg">
+    <div className="flex justify-center p-4 bg-gray-50 min-h-screen">
+      <Card className="w-full max-w-4xl shadow-xl border-green-500 border-t-4">
         <CardHeader className="p-8 pb-0">
-          <div className="flex justify-between items-center mb-6">
-            <Avatar className="w-24 h-24">
-              <AvatarImage src={profile?.avatar_url} alt={profile?.name} />
-              <AvatarFallback>{profile?.name?.charAt(0)}</AvatarFallback>
-            </Avatar>
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+            <div className="flex items-center gap-6">
+              <Avatar className="w-32 h-32 border-4 border-green-500 shadow-lg">
+                <AvatarImage src={profile?.avatar_url} alt={profile?.name} />
+                <AvatarFallback className="bg-green-500 text-white text-4xl font-bold">
+                  {profile?.name?.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <h2 className="text-3xl font-bold text-gray-800">{profile?.name}</h2>
+              </div>
+            </div>
             <Button
               onClick={editMode}
               variant="outline"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 bg-green-500 text-white hover:bg-green-600 border-none shadow transition-all duration-200 ease-in-out transform hover:scale-105"
             >
               <FaEdit /> Edit Profile
             </Button>
           </div>
-          <div className="space-y-4">
-            <h2 className="text-3xl font-bold">{profile?.name}</h2>
-            <p className="text-lg text-muted-foreground">
-              {profile?.description}
-            </p>
+          <div className="space-y-4 mt-6 border-t border-gray-200 pt-6">
+            <p className="text-lg text-gray-700 leading-relaxed">{profile?.description}</p>
+            <div className="flex flex-wrap gap-4 text-gray-600">
+            </div>
           </div>
         </CardHeader>
         <CardContent className="p-8">
-          <h3 className="text-xl font-semibold mb-4">Interests</h3>
+          <h3 className="text-2xl font-semibold mb-4 text-gray-800">Interests & Skills</h3>
           <div className="flex flex-wrap gap-2">
             {profile?.interest_tags.map((tag, index) => (
               <Badge
                 key={index}
                 variant="secondary"
-                className="text-sm px-3 py-1"
+                className="text-sm px-4 py-2 bg-green-100 text-green-700 hover:bg-green-200 border border-green-300 rounded-full transition-all duration-200 ease-in-out transform hover:scale-105"
               >
                 {tag}
               </Badge>
@@ -105,12 +118,5 @@ export default function Profile() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
-
-//Workflow
-//check if user has a record in profile table
-//- if not, show them CreateProfile, with a button
-//if user has a record but not complete, show them EditProfile
-//if user has a complete record, show page profile,
-//with a button that allows the user to edit their profile, which goes to editProfile
