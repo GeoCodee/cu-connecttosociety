@@ -136,7 +136,16 @@ export default function CreateEventsForm() {
         <label htmlFor="description" className="text-sm font-medium">
           Event Description
         </label>
-        <Textarea {...register("description")} id="description" rows={4} />
+        <Textarea
+          {...register("description")}
+          id="description"
+          rows={4}
+          placeholder="Tell us about your event"
+          maxLength={255}
+        />
+        <p className="text-sm text-gray-500 text-right">
+          {description?.length || 0}/255
+        </p>
         {errors.description && (
           <span className="text-red-500">{errors.description.message}</span>
         )}

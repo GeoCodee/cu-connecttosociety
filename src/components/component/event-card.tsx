@@ -21,6 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Bounce, ToastContainer, toast } from "react-toastify";
+import { Badge } from "../ui/badge";
 
 export interface eventDetails {
   eventId: any;
@@ -30,6 +31,7 @@ export interface eventDetails {
   eventLocation: any;
   eventDate: any;
   eventStart: any;
+  eventTags: any;
   eventEnd: any;
   capacity: any;
   // joinEvent(eventId: any): void;
@@ -45,6 +47,7 @@ export default function EventCard({
   eventLocation,
   eventDate,
   eventStart,
+  eventTags,
   capacity,
   joinEvent,
   imageUrl,
@@ -116,13 +119,16 @@ export default function EventCard({
       <DialogTrigger asChild>
         <Card className="w-full p-6 rounded-lg border flex flex-col overflow-hidden cursor-pointer">
           <CardHeader className="p-2 space-y-0.5 flex-shrink-0">
-            <Image
-              src={`/${imageUrl}`}
-              width={500}
-              height={300}
-              className="object-cover rounded-md"
-              alt="event image"
-            />
+            <div className="relative w-full h-48 md:h-60">
+              {" "}
+              {/* Fixed height for mobile and desktop */}
+              <Image
+                src={`/${imageUrl}`}
+                layout="fill" // Use fill to cover the parent div
+                className="object-cover rounded-md" // Ensure the image covers the area
+                alt="event image"
+              />
+            </div>
             <CardTitle className="text-base font-bold text-nowrap">
               {eventName}
             </CardTitle>
@@ -207,6 +213,16 @@ export default function EventCard({
                   className="rounded-full"
                 />
               ))}
+            </div>
+            <div>
+              <h3 className="font-semibold mb-2">Tags</h3>
+              <div className="flex flex-wrap gap-2">
+                {eventTags.map((tag: string, index: number) => (
+                  <Badge key={index} variant="default" className="text-black">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
             </div>
           </div>
         </div>

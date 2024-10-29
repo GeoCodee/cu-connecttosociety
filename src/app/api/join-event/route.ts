@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 // import { getUserEmailById } from "@/lib/clerkFunction";
 import { stringify } from "querystring";
-import { getUserEmailById } from "@/lib/clerkFunction";
+import { getUserEmailById, getUserNameById } from "@/lib/clerkFunction";
 
 export async function POST(req: Request) {
   const { userId } = auth();
@@ -27,15 +27,22 @@ export async function POST(req: Request) {
     await sql`SELECT * FROM EVENT WHERE eventid = ${eventId}`;
 
   const getUserById = getUserEmailById(user?.id);
-  console.log("User Properties: \n");
+
+  // console.log("User Properties: \n");
   console.log("Name:", getUserById);
-  
+
+  const organizer = await getUserNameById(eventDetails.rows[0]["userid"]);
+  console.log(organizer);
+  // console.log(eventDetails);
+
   const mailProperties: MailProperties = {
     to: joinerEmail,
     eventName: eventDetails.rows[0]["eventname"],
-    organizerName: "Geoffrey Fornoles", //Need to get data
+    organizerName: organizer, //Need to get data
     eventDescription: eventDetails.rows[0]["description"],
     eventLocation: eventDetails.rows[0]["eventlocation"],
+    eventDate: eventDetails.rows[0]["eventdate"],
+    eventTime: eventDetails.rows[0]["eventtime"],
     subject: "Confirmation Email",
     // body: "<h1>This is a test</h1>",
   };

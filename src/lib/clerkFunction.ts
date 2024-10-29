@@ -41,3 +41,25 @@ export async function getUserEmailById(userId: any) {
     throw new Error("Failed to fetch user email");
   }
 }
+
+export async function getUserNameById(userId: string) {
+  try {
+    const user = await clerkClient.users.getUser(userId);
+
+    // Return full name if both first and last name exist
+    if (user.firstName && user.lastName) {
+      return `${user.firstName} ${user.lastName}`;
+    }
+
+    // Return first name if only first name exists
+    if (user.firstName) {
+      return user.firstName;
+    }
+
+    // Return username or email as fallback
+    return user.username || user.emailAddresses[0].emailAddress;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
+  }
+}

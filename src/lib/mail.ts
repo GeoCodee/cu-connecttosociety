@@ -8,6 +8,8 @@ export interface MailProperties {
   organizerName: any;
   eventDescription: any;
   eventLocation: any;
+  eventDate: any;
+  eventTime: any;
   subject: any;
 }
 
@@ -17,6 +19,8 @@ export async function sendMail({
   eventName,
   eventDescription,
   eventLocation,
+  eventDate,
+  eventTime,
   subject,
 }: MailProperties) {
   const { SMTP_EMAIL, SMTP_PASSWORD } = process.env;
@@ -29,7 +33,7 @@ export async function sendMail({
   });
   try {
     const testResult = await transport.verify();
-    console.log(testResult);
+    // console.log(testResult);
   } catch (error) {
     console.log(error);
     return;
@@ -46,10 +50,12 @@ export async function sendMail({
         eventDescription,
         eventName,
         eventLocation,
+        eventDate,
+        eventTime,
         subject,
       }),
     });
-    console.log(sendResult);
+    // console.log(sendResult);
   } catch (error) {}
 }
 
@@ -64,6 +70,8 @@ export function compileConfirmationEmail(mailProperties: MailProperties) {
     organizerName: mailProperties.organizerName,
     eventDescription: mailProperties.eventDescription,
     eventLocation: mailProperties.eventLocation,
+    eventDate: mailProperties.eventDate,
+    eventTime: mailProperties.eventTime,
   });
 
   return htmlBody;
