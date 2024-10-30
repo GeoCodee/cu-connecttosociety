@@ -21,10 +21,10 @@ interface CreateOrEditProfileProps {
   existingProfile?: ProfileData
 }
 
-const CreateOrEditProfile: React.FC<CreateOrEditProfileProps> = ({
+export default function CreateOrEditProfile({
   setIsEditing,
   existingProfile,
-}) => {
+}: CreateOrEditProfileProps) {
   const [profile, setProfile] = useState<ProfileData>(
     existingProfile || {
       name: "",
@@ -109,8 +109,8 @@ const CreateOrEditProfile: React.FC<CreateOrEditProfileProps> = ({
   }
 
   return (
-    <div className="flex justify-center p-4 bg-gray-50 min-h-screen">
-      <Card className="w-full max-w-4xl shadow-xl border-green-500 border-t-4">
+    <div className="flex justify-center p-4 bg-[#0f1729] min-h-screen">
+      <Card className="w-full max-w-4xl shadow-xl border-green-500 border-t-4 bg-white">
         <CardHeader className="p-8">
           <div className="flex items-center gap-6 mb-6">
             <Avatar className="w-24 h-24 border-4 border-green-500 shadow-lg">
@@ -201,5 +201,3 @@ const CreateOrEditProfile: React.FC<CreateOrEditProfileProps> = ({
     </div>
   )
 }
-
-export default CreateOrEditProfile
